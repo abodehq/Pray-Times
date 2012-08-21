@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Daily Prayer Timetable </title>
+	<style>
+		body, td, th {font-family: verdana; font-size: 12px; color: #404040;}
+		#timetable {border-width: 1px; border-style: outset; border-collapse: collapse; border-color: gray; width: 9em;}
+		#timetable td, #timetable th {border-width: 1px; border-spacing: 1px; padding: 2px 4px; border-style: inset; border-color: #CCCCCC;}
+		#timetable th {color:black; text-align: center; font-weight: bold; background-color: #F8F7F4;}
+	</style>
+</head>
+
+<body>
+
+<script type="text/javascript" src="https://s3.amazonaws.com/islamSite/PrayTimes/PrayTimes.js"></script>
+
+<br>
+<p align="center">Amman, Jordan<p>
+<div align="center" id="table"></div>
+
+<script type="text/javascript">
+	
+	var date = new Date(); // today
+	var times = prayTimes.getTimes(date, [31.95, 35.933], 2);
+	var list = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha', 'Midnight'];
+
+	var html = '<table id="timetable">';
+	html += '<tr><th colspan="2">'+ date.toLocaleDateString()+ '</th></tr>';
+	for(var i in list)	{
+		html += '<tr><td>'+ list[i]+ '</td>';
+		html += '<td>'+ times[list[i].toLowerCase()]+ '</td></tr>';
+	}
+	html += '</table>';
+	document.getElementById('table').innerHTML = html;
+
+</script>
+
+</body>
+</html>

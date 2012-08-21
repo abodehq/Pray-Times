@@ -1,0 +1,426 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link href="/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+		<meta name="generator" content="MediaWiki 1.16.0" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="search" type="application/opensearchdescription+xml" href="/w/opensearch_desc.php" title="Pray Times (en)" />
+<link title="Creative Commons" type="application/rdf+xml" href="/w/index.php?title=Code_Manual&amp;action=creativecommons" rel="meta" />
+<link rel="copyright" href="http://creativecommons.org/licenses/by-nc/3.0/" />
+<link rel="alternate" type="application/atom+xml" title="Pray Times Atom feed" href="/w/index.php?title=Special:RecentChanges&amp;feed=atom" />		<title>Code Manual - Pray Times</title>
+		<style type="text/css" media="screen, projection">/*<![CDATA[*/
+			@import "/w/skins/common/shared.css?270";
+			@import "/w/skins/praytimes/main.css?270";
+		/*]]>*/</style>
+		<link rel="stylesheet" type="text/css" media="print" href="?270" />
+		<!--[if lt IE 7]><meta http-equiv="imagetoolbar" content="no" /><![endif]-->
+		
+		<script>
+var skin="praytimes",
+stylepath="/w/skins",
+wgUrlProtocols="http\\:\\/\\/|https\\:\\/\\/|ftp\\:\\/\\/|irc\\:\\/\\/|gopher\\:\\/\\/|telnet\\:\\/\\/|nntp\\:\\/\\/|worldwind\\:\\/\\/|mailto\\:|news\\:|svn\\:\\/\\/",
+wgArticlePath="/wiki/$1",
+wgScriptPath="/w",
+wgScriptExtension=".php",
+wgScript="/w/index.php",
+wgVariantArticlePath=false,
+wgActionPaths={},
+wgServer="http://praytimes.org",
+wgCanonicalNamespace="",
+wgCanonicalSpecialPageName=false,
+wgNamespaceNumber=0,
+wgPageName="Code_Manual",
+wgTitle="Code Manual",
+wgAction="view",
+wgArticleId=10,
+wgIsArticle=true,
+wgUserName=null,
+wgUserGroups=null,
+wgUserLanguage="en",
+wgContentLanguage="en",
+wgBreakFrames=false,
+wgCurRevisionId=355,
+wgVersion="1.16.0",
+wgEnableAPI=true,
+wgEnableWriteAPI=true,
+wgSeparatorTransformTable=["", ""],
+wgDigitTransformTable=["", ""],
+wgMainPageTitle="Main Page",
+wgFormattedNamespaces={"-2": "Media", "-1": "Special", "0": "", "1": "Talk", "2": "User", "3": "User talk", "4": "Pray Times", "5": "Pray Times talk", "6": "File", "7": "File talk", "8": "MediaWiki", "9": "MediaWiki talk", "10": "Template", "11": "Template talk", "12": "Help", "13": "Help talk", "14": "Category", "15": "Category talk"},
+wgNamespaceIds={"media": -2, "special": -1, "": 0, "talk": 1, "user": 2, "user_talk": 3, "pray_times": 4, "pray_times_talk": 5, "file": 6, "file_talk": 7, "mediawiki": 8, "mediawiki_talk": 9, "template": 10, "template_talk": 11, "help": 12, "help_talk": 13, "category": 14, "category_talk": 15, "image": 6, "image_talk": 7},
+wgSiteName="Pray Times",
+wgCategories=["Code"],
+wgRestrictionEdit=["sysop"],
+wgRestrictionMove=["sysop"];
+</script>                
+		<script type="text/javascript" src="/w/skins/common/wikibits.js?270"><!-- wikibits js --></script>
+		<!-- Head Scripts -->
+<script src="/w/skins/common/ajax.js?270"></script>
+		<script type="text/javascript" src="/w/index.php?title=-&amp;action=raw&amp;gen=js&amp;useskin=praytimes"><!-- site js --></script>
+	</head>
+  <body                 >
+	<div id="titleBar">
+		<div id="titleText"><a href="/" title="Main Page">
+			<span style="color:#173A7B">PrayTimes</span><span style="color:#66f; font-size:smaller;">.org</span>
+		</a></div>
+	</div>
+    <div id="globalWrapper">
+      <div id="column-content">
+	<div id="content">
+	  <a name="top" id="contentTop"></a>
+	  	  <h1 class="firstHeading">Code Manual</h1>
+	  <div id="bodyContent">
+	    <h3 id="siteSub">From Pray Times</h3>
+	    <div id="contentSub"></div>
+	    	    	    <!-- start content -->
+	    <p>Pray Times provides a set of handy functions to calculate prayer times for any location around the world, based on a variety of calculation methods currently used in Muslim communities. 
+</p><p>The code is originally written in JavaScript. This manual provides information on how to use the code on a web-page or a JavaScript-based application to display prayer times.
+</p>
+<table id="toc" class="toc"><tr><td><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Downloads_and_Examples"><span class="tocnumber">1</span> <span class="toctext">Downloads and Examples</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#General_Usage"><span class="tocnumber">2</span> <span class="toctext">General Usage</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Get_Prayer_Times"><span class="tocnumber">3</span> <span class="toctext">Get Prayer Times</span></a></li>
+<li class="toclevel-1 tocsection-4"><a href="#Set_Calculation_Method"><span class="tocnumber">4</span> <span class="toctext">Set Calculation Method</span></a></li>
+<li class="toclevel-1 tocsection-5"><a href="#Adjusting_Parameters"><span class="tocnumber">5</span> <span class="toctext">Adjusting Parameters</span></a></li>
+<li class="toclevel-1 tocsection-6"><a href="#Tuning_Times"><span class="tocnumber">6</span> <span class="toctext">Tuning Times</span></a></li>
+</ul>
+</td></tr></table><script>if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+<h2> <span class="mw-headline" id="Downloads_and_Examples"> Downloads and Examples </span></h2>
+<p><b>Download</b>:
+</p>
+<ul><li> Code: <a href="http://praytimes.org/code/v2/js/PrayTimes.js" class="external text" rel="nofollow">PrayTimes.js</a> (3 KB, minified and gzipped)
+</li><li> Version: 2.3 (see <a href="/wiki/Code_ChangeLog" title="Code ChangeLog">changes log</a>)
+</li><li> License: <a href="http://www.gnu.org/licenses/lgpl.html" class="external text" rel="nofollow">GNU LGPL v3</a>
+</li></ul>
+<p><b>Examples</b>: 
+</p>
+<ul><li> A simple example: <a href="http://praytimes.org/code/v2/js/examples/simple.htm" class="external text" rel="nofollow">simple.htm</a>
+</li><li> Monthly timetable: <a href="http://praytimes.org/code/v2/js/examples/monthly.htm" class="external text" rel="nofollow">monthly.htm</a>
+</li><li> Yearly prayer times: <a href="http://praytimes.org/code/v2/js/examples/yearly.htm" class="external text" rel="nofollow">yearly.htm</a>
+</li></ul>
+<p><b>See Also</b>: 
+</p>
+<ul><li> Older Version: <a href="/wiki/Code_Manual_(ver_1)" title="Code Manual (ver 1)"> Version 1</a>
+</li><li> <a href="/wiki/Code" title="Code">Code in Other Languages</a> (Python, PHP, Java, Objective-C, C#, etc.)
+</li></ul>
+<h2> <span class="mw-headline" id="General_Usage"> General Usage </span></h2>
+<p>The first step for using PrayTimes in a web-page or widget is to include it using a line like this:
+</p>
+<pre> &lt;script type="text/javascript" src="PrayTimes.js"&gt;&lt;/script&gt; 
+</pre>
+<p>After including PrayTimes.js, an object named prayTimes is created and is ready to use. We can immediately get the prayer times (using the default settings) from this object. For example, to get today's prayer times for a location with latitude 43, longitude -80, and time zone -5, we can call:
+</p>
+<pre> prayTimes.getTimes(new Date(), [43, -80], -5);
+</pre>
+<p>There are several functions for adjusting calculation parameters. For example, we can call the following function (before calling <code>getTimes</code>) to change the calculation method to ISNA:
+</p>
+<pre> prayTimes.setMethod('ISNA'); 
+</pre>
+<p>Details of the functions available in PrayTimes along with their description are provided below.
+</p>
+<h2> <span class="mw-headline" id="Get_Prayer_Times"> Get Prayer Times </span></h2>
+<p>The following function is used to retrieve prayer times for a given date and location:  
+</p>
+<dl><dd><code><b>getTimes</b> (date, coordinates, timezone, dst, format)</code>
+</dd></dl>
+<p>The input parameters are described below:
+</p>
+<dl><dt> date</dt><dd> The date for which prayer times are calculated. You can use <code>new Date()</code> to specify today. Date can be also entered as a triple <code>[year, month, day]</code>. For example, <code>[2009, 2, 26]</code> specifies February 26, 2009.
+</dd></dl>
+<dl><dt> coordinates</dt><dd> Specifies the coordinates of the input location as a triple <code>[latitude, longitude, elevation]</code>. Latitude is a real number between -90 and 90, longitude is between -180 and 180, and elevation is a positive number, specifying the height in meters with respect to the surrounding terrain. The elevation parameter is optional. Examples of valid coordinates are <code>[-43.2, 80.6]</code> and <code>[12.5, -25.8, 300]</code>.
+</dd></dl>
+<dl><dt> timezone</dt><dd> The difference to Greenwich time (GMT) in hours. If omitted or set to 'auto', <code>timezone</code> is extracted from the system.
+</dd></dl>
+<dl><dt> dst</dt><dd> Daylight Saving Time: 1 if date is in daylight saving time, 0 otherwise. If omitted or set to 'auto', <code>dst</code> is extracted from the system.
+</dd></dl>
+<dl><dt> format</dt><dd> Output time format, according to the following table:
+</dd></dl>
+<table class="wikitable" style="margin: 1em 2.25em 0;">
+<tr>
+<th>Format
+</th><th>Description
+</th><th>Example
+</th></tr>
+<tr>
+<td> 24h </td><td> 24-hour time format </td><td> 16:45
+</td></tr>
+<tr>
+<td> 12h </td><td> 12-hour time format </td><td> 4:45 pm
+</td></tr>
+<tr>
+<td> 12hNS </td><td> 12-hour format with no suffix &nbsp; </td><td> 4:45
+</td></tr>
+<tr>
+<td> Float </td><td> Floating point number </td><td> 16.75
+</td></tr></table>
+<p><u><b>Return Value</b></u>
+</p><p><code>getTimes</code> return an associative array containing 9 prayer times (see <a href="/wiki/Calculation" title="Calculation" class="mw-redirect"> here</a> for the list of times and their definition). Each time can be accessed thorough its name. For example, if the output of <code>getTimes</code> function is stored in an object <code>times</code>, the time for sunrise can be accessed through <code>times.sunrise</code>. 
+</p><p><u><b>Example</b></u>
+</p>
+<pre>
+ var times = prayTimes.getTimes(new Date(), [43, -80], -5);
+ document.write('Sunrise&nbsp;: '+ times.sunrise)
+</pre>
+<h2> <span class="mw-headline" id="Set_Calculation_Method"> Set Calculation Method </span></h2>
+<p>There are several conventions for calculating prayer times. The default convention used in PrayTimes is Muslim World League. You can change the calculation method using the following function: 
+</p>
+<dl><dd><code><b>setMethod</b> (method)</code>
+</dd></dl>
+<p><code>method</code> can be any of the followings:
+</p>
+<table class="wikitable" style="margin: 1em 2.25em 0;">
+<tr>
+<th>Method
+</th><th>Description
+</th></tr>
+<tr>
+<td> MWL </td><td> Muslim World League
+</td></tr>
+<tr>
+<td> ISNA </td><td> Islamic Society of North America
+</td></tr>
+<tr>
+<td> Egypt </td><td> Egyptian General Authority of Survey
+</td></tr>
+<tr>
+<td> Makkah </td><td> Umm al-Qura University, Makkah
+</td></tr>
+<tr>
+<td> Karachi </td><td> University of Islamic Sciences, Karachi
+</td></tr>
+<tr>
+<td> Tehran </td><td> Institute of Geophysics, University of Tehran
+</td></tr>
+<tr>
+<td> Jafari </td><td> Shia Ithna Ashari (Ja`fari)
+</td></tr></table>
+<p><br />
+More information on the above calculation methods is provided <a href="/wiki/Calculation_Methods" title="Calculation Methods">here</a>.
+</p><p><br />
+<u><b>Example</b></u>
+</p>
+<pre> prayTimes.setMethod('Makkah');
+</pre>
+<h2> <span class="mw-headline" id="Adjusting_Parameters"> Adjusting Parameters </span></h2>
+<p>The calculating parameters can be adjusted using the following function: 
+</p>
+<dl><dd><code><b>adjust</b> (parameters)</code>
+</dd></dl>
+<p><code>parameters</code> is an associative array composed of any number of the following parameters:
+</p>
+<table class="wikitable" style="margin: 1em 2.25em 0;">
+<tr>
+<th>Parameter
+</th><th>Values
+</th><th>Description
+</th><th>Sample Value
+</th></tr>
+<tr>
+<td rowspan="2"> imsak
+</td><td> degrees &nbsp; </td><td> twilight angle </td><td> 18
+</td></tr>
+<tr>
+<td> minutes </td><td> minutes before fajr </td><td> 10 min
+</td></tr>
+<tr>
+<td> fajr </td><td> degrees </td><td> twilight angle </td><td> 15
+</td></tr>
+<tr>
+<td> dhuhr </td><td> minutes </td><td> minutes after mid-day </td><td> 1 min
+</td></tr>
+<tr>
+<td rowspan="2"> asr
+</td><td> method </td><td> asr juristic method; see the table below </td><td> Standard
+</td></tr>
+<tr>
+<td> factor </td><td> shadow length factor for realizing asr </td><td> 1.7
+</td></tr>
+<tr>
+<td rowspan="2"> maghrib
+</td><td> degrees </td><td> twilight angle </td><td> 4
+</td></tr>
+<tr>
+<td> minutes </td><td> minutes after sunset </td><td> 15 min
+</td></tr>
+<tr>
+<td rowspan="2"> isha
+</td><td> degrees </td><td> twilight angle </td><td> 18
+</td></tr>
+<tr>
+<td> minutes </td><td> minutes after maghrib </td><td> 90 min
+</td></tr>
+<tr>
+<td> midnight </td><td> method </td><td> midnight method; see the table below </td><td> Standard
+</td></tr>
+<tr>
+<td> highLats </td><td> method </td><td>higher latitudes adjustment; see below  </td><td> None
+</td></tr></table>
+<p><br />
+</p>
+<dl><dt>asr methods</dt><dd>
+</dd></dl>
+<table class="wikitable" style="margin: 1em 2.25em 0;">
+<tr>
+<th>Method
+</th><th>Description  (<a href="/wiki/Calculation#Asr" title="Calculation" class="mw-redirect">more info</a>)
+</th></tr>
+<tr>
+<td> Standard </td><td> Shafii, Maliki, Jafari and Hanbali (shadow factor = 1)
+</td></tr>
+<tr>
+<td> Hanafi </td><td> Hanafi school of tought (shadow factor = 2)
+</td></tr></table>
+<p><br />
+</p>
+<dl><dt> midnight methods</dt><dd>
+</dd></dl>
+<table class="wikitable" style="margin: 1em 2.25em 0;">
+<tr>
+<th>Method
+</th><th>Description
+</th></tr>
+<tr>
+<td> Standard </td><td> The mean time from Sunset to Sunrise
+</td></tr>
+<tr>
+<td> Jafari </td><td> The mean time from Maghrib to Fajr
+</td></tr></table>
+<p><br />
+</p>
+<dl><dt> higher latitudes methods</dt><dd> 
+</dd></dl>
+<table class="wikitable" style="margin: 1em 2.25em 0;">
+<tr>
+<th>Method
+</th><th>Description  (<a href="/wiki/Calculation#Higher_Latitudes" title="Calculation" class="mw-redirect">more info</a>)
+</th></tr>
+<tr>
+<td> None </td><td> No adjustments
+</td></tr>
+<tr>
+<td> NightMiddle </td><td> The middle of the night method
+</td></tr>
+<tr>
+<td> OneSeventh </td><td> The 1/7th of the night method
+</td></tr>
+<tr>
+<td> AngleBased </td><td> The angle-based method (recommended)
+</td></tr></table>
+<p><br />
+<u><b>Example</b></u>
+</p>
+<pre> prayTimes.adjust( {fajr: 16, dhuhr: '5 min', asr: 'Hanafi', isha: 15} );
+</pre>
+<h2> <span class="mw-headline" id="Tuning_Times"> Tuning Times </span></h2>
+<p>You can further tune calculated prayer times (for precaution) using the following function: 
+</p>
+<dl><dd><code><b>tune</b> (offsets)</code>
+</dd></dl>
+<p>where <code>offsets</code> is an associative array containing time offsets in minutes for each prayer time. 
+</p><p><br />
+<u><b>Example</b></u>
+</p>
+<pre> prayTimes.tune( {sunrise: -1, sunset: 3.5} );
+</pre>
+<blockquote>
+<b>Notes</b>:
+<ul><li> By default, PrayTimes rounds minutes to the nearest values. To round a specific time up, you can tune it by&nbsp;+0.5 minutes, and to round it down, you can tune it by&nbsp;-0.5 minutes.
+</li><li> Tuning is the last step after calculating step, and thus, it has no effect on the calculation parameters. For example, if Isha is set to be 90 minutes after sunset, tuning sunset by 5 minutes will not push Isha forward.
+</li></ul>
+</blockquote>
+
+<!-- 
+NewPP limit report
+Preprocessor node count: 32/1000000
+Post-expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key praytimes:pcache:idhash:10-0!1!0!!en!2!edit=0 and timestamp 20120819155622 -->
+<div class="printfooter">
+Retrieved from "<a href="http://praytimes.org/wiki/Code_Manual">http://praytimes.org/wiki/Code_Manual</a>"</div>
+	    <div id="catlinkswrap"><div id='catlinks' class='catlinks'><div id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <span dir='ltr'><a href="/wiki/Category:Code" title="Category:Code">Code</a></span></div></div></div>	    <!-- end content -->
+	    <div class="visualClear"></div>
+	  </div>
+	</div>
+      </div>
+      <div id="column-one">
+	<div class="portlet" id="p-logo">
+	  <a style="background-image: url(/w/skins/common/images/wiki.png);"
+	    href="/wiki/Main_Page"
+	    title="Main Page"></a>
+	</div>
+	<script type="text/javascript"> if (window.isMSIE55) fixalpha(); </script>
+		<div class='portlet' id='p-Site'>
+	  <h5>Site</h5>
+	  <div class='pBody'>
+	    <ul>
+	    	      <li id="n-Home"><a href="http://praytimes.org/">Home</a></li>
+	     	      <li id="n-Calculation"><a href="http://praytimes.org/calculation">Calculation</a></li>
+	     	      <li id="n-Manual"><a href="http://praytimes.org/manual">Manual</a></li>
+	     	      <li id="n-Code"><a href="http://praytimes.org/code/">Code</a></li>
+	     	      <li id="n-Audio"><a href="http://praytimes.org/audio/">Audio</a></li>
+	     	      <li id="n-About"><a href="http://praytimes.org/about">About</a></li>
+	     	      <li id="n-Contact"><a href="http://praytimes.org/contact">Contact</a></li>
+	     	    </ul>
+	  </div>
+	</div>
+		<div id="p-search" class="portlet">
+	  <h5><label for="searchInput">Search</label></h5>
+	  <div class="pBody">
+	    <form name="searchform" action="/wiki/Special:Search" id="searchform">
+	      <input id="searchInput" name="search" type="text"
+	        accesskey="f" value="" />
+	      <input type='submit' name="go" class="searchButton" id="searchGoButton"
+	        value="Go"
+	        />&nbsp;<input type='submit' name="fulltext"
+	        class="searchButton"
+	        value="Search" />
+	    </form>
+	  </div>
+	</div>
+	<div class="portlet" id="p-tb">
+	  <h5>Toolbox</h5>
+	  <div class="pBody">
+	    <ul>
+		  		  <li id="t-whatlinkshere"><a href="/wiki/Special:WhatLinksHere/Code_Manual">What links here</a></li>
+		  		  <li id="t-recentchangeslinked"><a href="/wiki/Special:RecentChangesLinked/Code_Manual">Related changes</a></li>
+		                	      	      	      	      	      	      	      	      	      <li id="t-specialpages"><a href="/wiki/Special:SpecialPages">Special pages</a></li>	      	      	      <li id="t-print"><a href="/w/index.php?title=Code_Manual&amp;printable=yes">Printable version</a></li>
+	      	    </ul>
+	  </div>
+	</div>
+	<div id="p-cactions" class="portlet">
+	  <h5>Views</h5>
+	  <ul>
+	    <li id="ca-nstab-main"
+	       class="selected"	       ><a href="/wiki/Code_Manual">Page</a></li><li id="ca-talk"
+	       class="new"	       ><a href="/w/index.php?title=Talk:Code_Manual&amp;action=edit&amp;redlink=1">Discussion</a></li><li id="ca-viewsource"
+	       	       ><a href="/w/index.php?title=Code_Manual&amp;action=edit">View source</a></li><li id="ca-history"
+	       	       ><a href="/w/index.php?title=Code_Manual&amp;action=history">History</a></li>	  </ul>
+	</div>
+	<div class="portlet" id="p-personal">
+	  <h5>Personal tools</h5>
+	  <div class="pBody">
+	    <ul>
+	    <li id="pt-login"><a href="/w/index.php?title=Special:UserLogin&amp;returnto=Code_Manual">Log in</a></li>	    </ul>
+	  </div>
+	</div>
+	<!--
+	-->
+	      </div><!-- end of the left (by default at least) column -->
+      <div class="visualClear"></div>
+      <div id="footer">
+		<table width = "100%">
+			<tr><td width="5%" align="left" nowrap='nowrap'><div id="f-copyrightico"><a href="http://creativecommons.org/licenses/by-nc/3.0/"><img src="http://i.creativecommons.org/l/by-nc/3.0/88x31.png" alt="Attribution-NonCommercial 3.0 Unported" width="88" height="31" /></a></div></td>
+				<td align="center">
+	  Copyright &copy; 2007-2012 <a href="http://PrayTimes.org/">PrayTimes.org</a> -
+	    This page was last modified on 11 May 2011, at 02:18. - 	  This page has been accessed 80,211 times. - 	  	  	  <a href="http://www.ipbwiki.com/forums/index.php?showtopic=403">Skin</a> - 
+	  	  <a href="/wiki/Pray_Times:General_disclaimer" title="Pray Times:General disclaimer">Disclaimers</a> - 	  <a href="/wiki/Pray_Times:About" title="Pray Times:About">About Pray Times</a>	</td>
+			<td width="5%" align="right" nowrap='nowrap'><div id="f-poweredbyico"><a href="http://www.mediawiki.org/"><img src="/w/skins/common/images/poweredby_mediawiki_88x31.png" height="31" width="88" alt="Powered by MediaWiki" /></a></div></td></tr></table>
+      </div>
+    </div>
+    <!-- Served in 0.156 secs. -->  </body>
+</html>

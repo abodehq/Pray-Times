@@ -1,0 +1,362 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en" dir="ltr">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<link href="/favicon.ico" rel="shortcut icon" type="image/vnd.microsoft.icon" />
+		<meta name="generator" content="MediaWiki 1.16.0" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="search" type="application/opensearchdescription+xml" href="/w/opensearch_desc.php" title="Pray Times (en)" />
+<link title="Creative Commons" type="application/rdf+xml" href="/w/index.php?title=Prayer_Times_Calculation&amp;action=creativecommons" rel="meta" />
+<link rel="copyright" href="http://creativecommons.org/licenses/by-nc/3.0/" />
+<link rel="alternate" type="application/atom+xml" title="Pray Times Atom feed" href="/w/index.php?title=Special:RecentChanges&amp;feed=atom" />		<title>Prayer Times Calculation - Pray Times</title>
+		<style type="text/css" media="screen, projection">/*<![CDATA[*/
+			@import "/w/skins/common/shared.css?270";
+			@import "/w/skins/praytimes/main.css?270";
+		/*]]>*/</style>
+		<link rel="stylesheet" type="text/css" media="print" href="?270" />
+		<!--[if lt IE 7]><meta http-equiv="imagetoolbar" content="no" /><![endif]-->
+		
+		<script>
+var skin="praytimes",
+stylepath="/w/skins",
+wgUrlProtocols="http\\:\\/\\/|https\\:\\/\\/|ftp\\:\\/\\/|irc\\:\\/\\/|gopher\\:\\/\\/|telnet\\:\\/\\/|nntp\\:\\/\\/|worldwind\\:\\/\\/|mailto\\:|news\\:|svn\\:\\/\\/",
+wgArticlePath="/wiki/$1",
+wgScriptPath="/w",
+wgScriptExtension=".php",
+wgScript="/w/index.php",
+wgVariantArticlePath=false,
+wgActionPaths={},
+wgServer="http://praytimes.org",
+wgCanonicalNamespace="",
+wgCanonicalSpecialPageName=false,
+wgNamespaceNumber=0,
+wgPageName="Prayer_Times_Calculation",
+wgTitle="Prayer Times Calculation",
+wgAction="view",
+wgArticleId=3,
+wgIsArticle=true,
+wgUserName=null,
+wgUserGroups=null,
+wgUserLanguage="en",
+wgContentLanguage="en",
+wgBreakFrames=false,
+wgCurRevisionId=331,
+wgVersion="1.16.0",
+wgEnableAPI=true,
+wgEnableWriteAPI=true,
+wgSeparatorTransformTable=["", ""],
+wgDigitTransformTable=["", ""],
+wgMainPageTitle="Main Page",
+wgFormattedNamespaces={"-2": "Media", "-1": "Special", "0": "", "1": "Talk", "2": "User", "3": "User talk", "4": "Pray Times", "5": "Pray Times talk", "6": "File", "7": "File talk", "8": "MediaWiki", "9": "MediaWiki talk", "10": "Template", "11": "Template talk", "12": "Help", "13": "Help talk", "14": "Category", "15": "Category talk"},
+wgNamespaceIds={"media": -2, "special": -1, "": 0, "talk": 1, "user": 2, "user_talk": 3, "pray_times": 4, "pray_times_talk": 5, "file": 6, "file_talk": 7, "mediawiki": 8, "mediawiki_talk": 9, "template": 10, "template_talk": 11, "help": 12, "help_talk": 13, "category": 14, "category_talk": 15, "image": 6, "image_talk": 7},
+wgSiteName="Pray Times",
+wgCategories=["Code"],
+wgRestrictionEdit=["sysop"],
+wgRestrictionMove=["sysop"];
+</script>                
+		<script type="text/javascript" src="/w/skins/common/wikibits.js?270"><!-- wikibits js --></script>
+		<!-- Head Scripts -->
+<script src="/w/skins/common/ajax.js?270"></script>
+		<script type="text/javascript" src="/w/index.php?title=-&amp;action=raw&amp;gen=js&amp;useskin=praytimes"><!-- site js --></script>
+	</head>
+  <body                 >
+	<div id="titleBar">
+		<div id="titleText"><a href="/" title="Main Page">
+			<span style="color:#173A7B">PrayTimes</span><span style="color:#66f; font-size:smaller;">.org</span>
+		</a></div>
+	</div>
+    <div id="globalWrapper">
+      <div id="column-content">
+	<div id="content">
+	  <a name="top" id="contentTop"></a>
+	  	  <h1 class="firstHeading">Prayer Times Calculation</h1>
+	  <div id="bodyContent">
+	    <h3 id="siteSub">From Pray Times</h3>
+	    <div id="contentSub"></div>
+	    	    	    <!-- start content -->
+	    <div style="font-size: smaller; margin-top:-.3em">By: Hamid Zarrabi-Zadeh</div>
+<p>Muslims perform five prayers a day. Each prayer is given a certain prescribed time during which it must be performed. This document briefly describes these times, and explains how they can be calculated mathematically.
+</p>
+<table id="toc" class="toc"><tr><td><div id="toctitle"><h2>Contents</h2></div>
+<ul>
+<li class="toclevel-1 tocsection-1"><a href="#Definitions"><span class="tocnumber">1</span> <span class="toctext">Definitions</span></a></li>
+<li class="toclevel-1 tocsection-2"><a href="#Astronomical_Measures"><span class="tocnumber">2</span> <span class="toctext">Astronomical Measures</span></a></li>
+<li class="toclevel-1 tocsection-3"><a href="#Calculating_Prayer_Times"><span class="tocnumber">3</span> <span class="toctext">Calculating Prayer Times</span></a>
+<ul>
+<li class="toclevel-2 tocsection-4"><a href="#Dhuhr"><span class="tocnumber">3.1</span> <span class="toctext">Dhuhr</span></a></li>
+<li class="toclevel-2 tocsection-5"><a href="#Sunrise.2FSunset"><span class="tocnumber">3.2</span> <span class="toctext">Sunrise/Sunset</span></a></li>
+<li class="toclevel-2 tocsection-6"><a href="#Fajr_and_Isha"><span class="tocnumber">3.3</span> <span class="toctext">Fajr and Isha</span></a></li>
+<li class="toclevel-2 tocsection-7"><a href="#Asr"><span class="tocnumber">3.4</span> <span class="toctext">Asr</span></a></li>
+<li class="toclevel-2 tocsection-8"><a href="#Maghrib"><span class="tocnumber">3.5</span> <span class="toctext">Maghrib</span></a></li>
+<li class="toclevel-2 tocsection-9"><a href="#Midnight"><span class="tocnumber">3.6</span> <span class="toctext">Midnight</span></a></li>
+</ul>
+</li>
+<li class="toclevel-1 tocsection-10"><a href="#Higher_Latitudes"><span class="tocnumber">4</span> <span class="toctext">Higher Latitudes</span></a></li>
+<li class="toclevel-1 tocsection-11"><a href="#Implementation"><span class="tocnumber">5</span> <span class="toctext">Implementation</span></a></li>
+<li class="toclevel-1 tocsection-12"><a href="#References"><span class="tocnumber">6</span> <span class="toctext">References</span></a></li>
+</ul>
+</td></tr></table><script>if (window.showTocToggle) { var tocShowText = "show"; var tocHideText = "hide"; showTocToggle(); } </script>
+<h2> <span class="mw-headline" id="Definitions"> Definitions </span></h2>
+<p>To determine the exact time period for each prayer (and also for fasting), we need to determine nine points of time per a day. These times are defined in the following table:
+</p>
+<table class="wikitable" style="text-align:left">
+
+<tr>
+<th>Time
+</th><th>Definition
+</th></tr>
+<tr>
+<th> Imsak
+</th><td> The time to stop eating Sahur (for fasting), slightly before Fajr.
+</td></tr>
+<tr>
+<th> Fajr
+</th><td> When the sky begins to lighten (dawn).
+</td></tr>
+<tr>
+<th> Sunrise
+</th><td> The time at which the first part of the Sun appears above the horizon.
+</td></tr>
+<tr>
+<th> Dhuhr
+</th><td> When the Sun begins to decline after reaching its highest point in the sky.
+</td></tr>
+<tr>
+<th> Asr
+</th><td> The time when the length of any object's shadow reaches a factor (usually 1 or 2) of the length of the object itself plus the length of that object's shadow at noon.
+</td></tr>
+<tr>
+<th> Sunset
+</th><td> The time at which the Sun disappears below the horizon.
+</td></tr>
+<tr>
+<th> Maghrib
+</th><td> Soon after sunset.
+</td></tr>
+<tr>
+<th> Isha
+</th><td> The time at which darkness falls and there is no scattered light in the sky.
+</td></tr>
+<tr>
+<th> Midnight
+</th><td> The mean time from sunset to sunrise (or from Maghrib to Fajr, in some schools of thought).
+</td></tr></table>
+<p>The next section provides information on how to calculate the above times mathematically for any location if the coordinates of the location are known.
+</p>
+<h2> <span class="mw-headline" id="Astronomical_Measures">Astronomical Measures</span></h2>
+<p>There are two astronomical measures that are essential for computing prayer times. These two measures are the equation of time and the declination of the Sun.
+</p><p>The equation of time is the difference between time as read from a sundial and a clock. It results from an apparent irregular movement of the Sun caused by a combination of the obliquity of the Earth's rotation axis and the eccentricity of its orbit. The sundial can be ahead (fast) by as much as 16 min 33 s (around November 3) or fall behind by as much as 14 min 6 s (around February 12), as shown in the following graph:
+</p>
+<div class="center"><div class="floatnone"><a href="/wiki/File:Equation_of_time.png" class="image" title="The equation of time"><img alt="The equation of time" src="/w/images/thumb/0/00/Equation_of_time.png/360px-Equation_of_time.png" width="360" height="295" /></a></div></div>
+<div class="center"><b>The Equation of Time</b> (<a href="http://en.wikipedia.org/wiki/File:Equation_of_time.png" class="external text" rel="nofollow">Ref</a>)</div>
+<p>The declination of the Sun is the angle between the rays of the sun and the plane of the earth equator. The declination of the Sun changes continuously throughout the year. This is a consequence of the Earth's tilt, i.e. the difference in its rotational and revolutionary axes.
+</p>
+<div class="center"><div class="floatnone"><a href="/wiki/File:Declination.png" class="image" title="Declination of the Sun"><img alt="Declination of the Sun" src="/w/images/d/da/Declination.png" width="381" height="208" /></a></div></div>
+<div class="center"><b>The Declination of Sun</b></div>
+<p>The above two astronomical measures can be obtained accurately from The Star Almanac, or can be calculated approximately. The following algorithm from <a href="http://aa.usno.navy.mil/faq/docs/SunApprox.php" class="external text" rel="nofollow">U.S. Naval Observatory</a> computes the Sun's angular coordinates to an accuracy of about 1 arcminute within two centuries of 2000.
+</p>
+<pre>  
+   d = jd - 2451545.0;  // jd is the given Julian date 
+
+   g = 357.529 + 0.98560028* d;
+   q = 280.459 + 0.98564736* d;
+   L = q + 1.915* sin(g) + 0.020* sin(2*g);
+
+   R = 1.00014 - 0.01671* cos(g) - 0.00014* cos(2*g);
+   e = 23.439 - 0.00000036* d;
+   RA = arctan2(cos(e)* sin(L), cos(L))/ 15;
+
+   D = arcsin(sin(e)* sin(L));  // declination of the Sun
+   EqT = q/15 - RA;  // equation of time
+
+</pre>
+<h2> <span class="mw-headline" id="Calculating_Prayer_Times">Calculating Prayer Times</span></h2>
+<p>To calculate the prayer times for a given location, we need to know the latitude (L) and the longitude (Lng) of the location, along with the local Time Zone for that location. We also obtain the equation of time (EqT) and the declination of the Sun (D) for a given date using the algorithm mentioned in the previous section.
+</p>
+<h3> <span class="mw-headline" id="Dhuhr"> Dhuhr </span></h3>
+<p>Dhuhr can be calculated easily using the following formula:
+</p>
+<div style="text-align: center;">
+<p>Dhuhr = 12 + TimeZone - Lng/15 - EqT.
+</p>
+</div>
+<p>The above formula indeed calculates the midday time, when the Sun reaches its highest point in the sky. A slight margin is usually considered for Dhuhr as explained in <a href="/wiki/A_note_on_Dhuhr" title="A note on Dhuhr">this note</a>.
+</p>
+<h3> <span class="mw-headline" id="Sunrise.2FSunset"> Sunrise/Sunset </span></h3>
+<p>The time difference between the mid-day and the time at which sun reaches an angle &alpha; below the horizon can be computed using the following formula:
+</p><p><br />
+</p>
+<div class="center"><div class="floatnone"><a href="/wiki/File:Twilight-formula.gif" class="image" title="Twilight Formula"><img alt="Twilight Formula" src="/w/images/3/32/Twilight-formula.gif" width="328" height="42" /></a></div></div>
+<p><br />
+Astronomical sunrise and sunset occur at &alpha;=0. However, due to the refraction of light by terrestrial atmosphere, actual sunrise appears slightly before astronomical sunrise and actual sunset occurs after astronomical sunset. Actual sunrise and sunset can be computed using the following formulas:
+</p>
+<div class="center">
+<p>Sunrise = Dhuhr - T(0.833),<br />
+Sunset = Dhuhr + T(0.833).
+</p>
+</div>
+<p>If the observer's location is higher than the surrounding terrain, we can consider this elevation into consideration by increasing the above constant 0.833 by 0.0347 &times; sqrt(h), where h is the observer's height in meters.
+</p>
+<h3> <span class="mw-headline" id="Fajr_and_Isha"> Fajr and Isha </span></h3>
+<p>There are differing opinions on what angle to be used for calculating Fajr and Isha. The following table shows several conventions currently in use in various countries (more information is available at <a href="/wiki/Calculation_Methods" title="Calculation Methods">this page</a>).
+</p>
+<table class="wikitable" style="margin: 1em 0.5em 0.5em;">
+<tr>
+<th>Convention
+</th><th>Fajr Angle
+</th><th>Isha Angle
+</th></tr>
+<tr>
+<td> Muslim World League </td><td> 18 </td><td> 17
+</td></tr>
+<tr>
+<td> Islamic Society of North America (ISNA) </td><td> 15 </td><td> 15
+</td></tr>
+<tr>
+<td> Egyptian General Authority of Survey </td><td> 19.5 </td><td> 17.5
+</td></tr>
+<tr>
+<td> Umm al-Qura University, Makkah </td><td> 18.5 </td><td> 90 min after Maghrib<br />120 min during Ramadan
+</td></tr>
+<tr>
+<td> University of Islamic Sciences, Karachi </td><td> 18 </td><td> 18
+</td></tr>
+<tr>
+<td> Institute of Geophysics, University of Tehran </td><td> 17.7 </td><td> 14*
+</td></tr>
+<tr>
+<td> Shia Ithna Ashari, Leva Research Institute, Qum </td><td> 16 </td><td> 14
+</td></tr></table>
+<p><span>*<span> Isha angle is not explicitly defined in Tehran method.
+</p><p>For example, according to Muslim World League convention, Fajr = Dhuhr - T(18) and Isha = Dhuhr + T(17).
+</p>
+<h3> <span class="mw-headline" id="Asr">Asr</span></h3>
+<p>There are two main opinions on how to calculate Asr time. The majority of schools (including Shafi'i, Maliki, Ja'fari, and Hanbali) say it is at the time when the length of any object's shadow equals the length of the object itself plus the length of that object's shadow at noon. The dominant opinion in the Hanafi school says that Asr begins when the length of any object's shadow is twice the length of the object plus the length of that object's shadow at noon.
+</p><p>The following formula computes the time difference between the mid-day and the time at which the object's shadow equals <i>t</i> times the length of the object itself plus the length of that object's shadow at noon:
+</p><p><br />
+</p>
+<div class="center"><div class="floatnone"><a href="/wiki/File:Asr-formula.gif" class="image" title="Asr Formula"><img alt="Asr Formula" src="/w/images/a/a1/Asr-formula.gif" width="464" height="42" /></a></div></div>
+<p><br />
+Thus, in the first four schools of thought, Asr = Dhuhr + A(1), and in Hanafi school, Asr = Dhuhr + A(2).
+</p>
+<h3> <span class="mw-headline" id="Maghrib">Maghrib</span></h3>
+<p>In the Sunni's point of view, the time for Maghrib prayer begins once the Sun has completely set beneath the horizon, that is, Maghrib = Sunset (some calculators suggest 1 to 3 minutes after Sunset for precaution). In the Shia's view, however, the dominant opinion is that as long as the redness in the eastern sky appearing after sunset has not passed overhead, Maghrib prayer should not be performed. It is usually taken into consideration by assuming a twilight angle like Maghrib = Dhuhr + T(4).
+</p>
+<h3> <span class="mw-headline" id="Midnight">Midnight</span></h3>
+<p>Midnight is generally calculated as the mean time from Sunset to Sunrise, i.e., Midnight = 1/2(Sunrise - Sunset). In Shia point of view, the juridical midnight (the ending time for performing Isha prayer) is the mean time from Sunset to Fajr, i.e., Midnight = 1/2(Fajr - Sunset).
+</p>
+<h2> <span class="mw-headline" id="Higher_Latitudes">Higher Latitudes</span></h2>
+<p>In locations at higher latitude, twilight may persist throughout the night during some months of the year. In these abnormal periods, the determination of Fajr and Isha is not possible using the usual formulas mentioned in the previous section. To overcome this problem, several solutions have been proposed, three of which are described below.
+</p>
+<dl><dt> Middle of the Night</dt><dd> In this method, the period from sunset to sunrise is divided into two halves. The first half is considered to be the "night" and the other half as "day break". Fajr and Isha in this method are assumed to be at mid-night during the abnormal periods.
+</dd></dl>
+<dl><dt> One-Seventh of the Night</dt><dd> In this method, the period between sunset and sunrise is divided into seven parts. Isha begins after the first one-seventh part, and Fajr is at the beginning of the seventh part.
+</dd></dl>
+<dl><dt> Angle-Based Method</dt><dd> This is an intermediate solution, used by some recent prayer time calculators. Let &alpha; be the twilight angle for Isha, and let <i>t</i> = &alpha;/60. The period between sunset and sunrise is divided into <i>t</i> parts. Isha begins after the first part. For example, if the twilight angle for Isha is 15, then Isha begins at the end of the first quarter (15/60) of the night. Time for Fajr is calculated similarly. 
+</dd></dl>
+<p>In case Maghrib is not equal to Sunset, we can apply the above rules to Maghrib as well to make sure that Maghrib always falls between Sunset and Isha during the abnormal periods.
+</p>
+<h2> <span class="mw-headline" id="Implementation">Implementation</span></h2>
+<p>The formulas described above are implemented completely and can be obtained in various programming languages from <a href="/wiki/Code" title="Code">this page</a>.
+</p>
+<h2> <span class="mw-headline" id="References">References</span></h2>
+<ul><li> <a href="http://www.ummah.net/astronomy/saltime" class="external text" rel="nofollow">The Determination of Salat Times</a>, by Dr. Monzur Ahmed.
+</li><li> <a href="http://aa.usno.navy.mil/faq/docs/SunApprox.php" class="external text" rel="nofollow">Approximate Solar Coordinates</a>, by U.S. Naval Observatory.
+</li><li> <a href="http://www.jas.org.jo/muneer/" class="external text" rel="nofollow">The Islamic Prayer Times</a>, by Professor Tariq Muneer.
+</li><li> <a href="http://en.wikipedia.org/" class="external text" rel="nofollow">Wikipedia</a>, the free encyclopedia.</span>
+</li></ul>
+<p></span>
+</p>
+<!-- 
+NewPP limit report
+Preprocessor node count: 65/1000000
+Post-expand include size: 0/2097152 bytes
+Template argument size: 0/2097152 bytes
+Expensive parser function count: 0/100
+-->
+
+<!-- Saved in parser cache with key praytimes:pcache:idhash:3-0!1!0!!en!2!edit=0 and timestamp 20120819153154 -->
+<div class="printfooter">
+Retrieved from "<a href="http://praytimes.org/wiki/Prayer_Times_Calculation">http://praytimes.org/wiki/Prayer_Times_Calculation</a>"</div>
+	    <div id="catlinkswrap"><div id='catlinks' class='catlinks'><div id="mw-normal-catlinks"><a href="/wiki/Special:Categories" title="Special:Categories">Category</a>: <span dir='ltr'><a href="/wiki/Category:Code" title="Category:Code">Code</a></span></div></div></div>	    <!-- end content -->
+	    <div class="visualClear"></div>
+	  </div>
+	</div>
+      </div>
+      <div id="column-one">
+	<div class="portlet" id="p-logo">
+	  <a style="background-image: url(/w/skins/common/images/wiki.png);"
+	    href="/wiki/Main_Page"
+	    title="Main Page"></a>
+	</div>
+	<script type="text/javascript"> if (window.isMSIE55) fixalpha(); </script>
+		<div class='portlet' id='p-Site'>
+	  <h5>Site</h5>
+	  <div class='pBody'>
+	    <ul>
+	    	      <li id="n-Home"><a href="http://praytimes.org/">Home</a></li>
+	     	      <li id="n-Calculation"><a href="http://praytimes.org/calculation">Calculation</a></li>
+	     	      <li id="n-Manual"><a href="http://praytimes.org/manual">Manual</a></li>
+	     	      <li id="n-Code"><a href="http://praytimes.org/code/">Code</a></li>
+	     	      <li id="n-Audio"><a href="http://praytimes.org/audio/">Audio</a></li>
+	     	      <li id="n-About"><a href="http://praytimes.org/about">About</a></li>
+	     	      <li id="n-Contact"><a href="http://praytimes.org/contact">Contact</a></li>
+	     	    </ul>
+	  </div>
+	</div>
+		<div id="p-search" class="portlet">
+	  <h5><label for="searchInput">Search</label></h5>
+	  <div class="pBody">
+	    <form name="searchform" action="/wiki/Special:Search" id="searchform">
+	      <input id="searchInput" name="search" type="text"
+	        accesskey="f" value="" />
+	      <input type='submit' name="go" class="searchButton" id="searchGoButton"
+	        value="Go"
+	        />&nbsp;<input type='submit' name="fulltext"
+	        class="searchButton"
+	        value="Search" />
+	    </form>
+	  </div>
+	</div>
+	<div class="portlet" id="p-tb">
+	  <h5>Toolbox</h5>
+	  <div class="pBody">
+	    <ul>
+		  		  <li id="t-whatlinkshere"><a href="/wiki/Special:WhatLinksHere/Prayer_Times_Calculation">What links here</a></li>
+		  		  <li id="t-recentchangeslinked"><a href="/wiki/Special:RecentChangesLinked/Prayer_Times_Calculation">Related changes</a></li>
+		                	      	      	      	      	      	      	      	      	      <li id="t-specialpages"><a href="/wiki/Special:SpecialPages">Special pages</a></li>	      	      	      <li id="t-print"><a href="/w/index.php?title=Prayer_Times_Calculation&amp;printable=yes">Printable version</a></li>
+	      	    </ul>
+	  </div>
+	</div>
+	<div id="p-cactions" class="portlet">
+	  <h5>Views</h5>
+	  <ul>
+	    <li id="ca-nstab-main"
+	       class="selected"	       ><a href="/wiki/Prayer_Times_Calculation">Page</a></li><li id="ca-talk"
+	       class="new"	       ><a href="/w/index.php?title=Talk:Prayer_Times_Calculation&amp;action=edit&amp;redlink=1">Discussion</a></li><li id="ca-viewsource"
+	       	       ><a href="/w/index.php?title=Prayer_Times_Calculation&amp;action=edit">View source</a></li><li id="ca-history"
+	       	       ><a href="/w/index.php?title=Prayer_Times_Calculation&amp;action=history">History</a></li>	  </ul>
+	</div>
+	<div class="portlet" id="p-personal">
+	  <h5>Personal tools</h5>
+	  <div class="pBody">
+	    <ul>
+	    <li id="pt-login"><a href="/w/index.php?title=Special:UserLogin&amp;returnto=Prayer_Times_Calculation">Log in</a></li>	    </ul>
+	  </div>
+	</div>
+	<!--
+	-->
+	      </div><!-- end of the left (by default at least) column -->
+      <div class="visualClear"></div>
+      <div id="footer">
+		<table width = "100%">
+			<tr><td width="5%" align="left" nowrap='nowrap'><div id="f-copyrightico"><a href="http://creativecommons.org/licenses/by-nc/3.0/"><img src="http://i.creativecommons.org/l/by-nc/3.0/88x31.png" alt="Attribution-NonCommercial 3.0 Unported" width="88" height="31" /></a></div></td>
+				<td align="center">
+	  Copyright &copy; 2007-2012 <a href="http://PrayTimes.org/">PrayTimes.org</a> -
+	    This page was last modified on 28 February 2011, at 09:05. - 	  This page has been accessed 320,974 times. - 	  	  	  <a href="http://www.ipbwiki.com/forums/index.php?showtopic=403">Skin</a> - 
+	  	  <a href="/wiki/Pray_Times:General_disclaimer" title="Pray Times:General disclaimer">Disclaimers</a> - 	  <a href="/wiki/Pray_Times:About" title="Pray Times:About">About Pray Times</a>	</td>
+			<td width="5%" align="right" nowrap='nowrap'><div id="f-poweredbyico"><a href="http://www.mediawiki.org/"><img src="/w/skins/common/images/poweredby_mediawiki_88x31.png" height="31" width="88" alt="Powered by MediaWiki" /></a></div></td></tr></table>
+      </div>
+    </div>
+    <!-- Served in 0.148 secs. -->  </body>
+</html>

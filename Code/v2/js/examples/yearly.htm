@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title> Yearly Prayer Timetable </title>
+	<style>
+		body, form {font-family: tahoma; font-size: 12px; color: #404040; text-align: center; margin: 0; padding: 0}
+		pre {font-family: courier, serif, size: 10pt; margin: 0px auto;}
+		.header {background:#eef; border-bottom: 1px solid #ddd; padding: 7px;}
+	</style>
+</head>
+
+<body>
+
+<script type="text/javascript" src="../PrayTimes.js"></script>
+
+<div class="header">
+<form class="form" action="javascript:update();">
+	Latitude: <input type="text" value="31.95" id="latitude" size="2" onchange="update();">&nbsp;
+	Longitude: <input type="text" value="35.933" id="longitude" size="2" onchange="update();">&nbsp;
+	Year: <input type="text" value="2012" id="year" size="4" onchange="update();">&nbsp;
+	Time Zone: <input type="text" value="2" id="timezone" size="2" onchange="update();">&nbsp;
+	DST: 
+	<select id="dst" size="1" style="font-size: 12px;" onchange="update()">
+		<option value="auto" selected="selected">Auto</option>
+		<option value="0">0</option>
+		<option value="1">1</option>
+    </select>&nbsp;
+	Method: 
+	<select id="method" size="1" style="font-size: 12px;" onchange="update()">
+		<option value="MWL">Muslim World League (MWL)</option>
+		<option value="ISNA" >Islamic Society of North America (ISNA)</option>
+		<option value="Egypt">Egyptian General Authority of Survey</option>
+		<option value="Makkah" selected="selected">Umm al-Qura University, Makkah</option>
+		<option value="Karachi">University of Islamic Sciences, Karachi</option>
+		<option value="Jafari">Shia Ithna-Ashari (Jafari)</option>
+		<option value="Tehran">Institute of Geophysics, University of Tehran</option>
+    </select>
+</form>
+</div>
+<br/>
+
+<pre>
+ Date   Fajr   Sunrise  Dhuhr    Asr   Maghrib  Isha    
+----------------------------------------------------- 
+</pre>
+
+<div id="timetable">
+</div>
+<br/>
+
+<div align="center" style="margin-top: 7px">
+	Powered by: <a href="http://praytimes.org/">PrayTimes.org</a>
+</div>
+<br/>
+
+<script type="text/javascript">
+
+	var date = new Date();
+	$('year').value = date.getFullYear();
+	update();
+
+	function update() {
+		var lat = $('latitude').value;
+		var lng = $('longitude').value;
+		var timeZone = $('timezone').value;
+		var dst = $('dst').value;
+		var year = $('year').value;
+		var method = $('method').value;
+		var html = makeTable(method, year, lat, lng, timeZone, dst);
+		$('timetable').innerHTML = '<pre>'+ html+ '</pre>';
+	}
+
+
+	function makeTable(method, year, lat, lng, timeZone, dst) {
+		var table = ''; 
+		var monthNames = new Array('Jan', 'Feb', 'Mar', 'Apr', 'May',
+				'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec');
+		var date = new Date(year, 0, 1);
+		var endDate = new Date(1*year+ 1, 0, 1);
+		prayTimes.setMethod(method);
+		
+		var output = ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha'];
+
+		while (date < endDate) {
+			var times = prayTimes.getTimes(date, [lat, lng], timeZone, dst);
+			var day = date.getDate();
+			day = (day <10) ? '0'+ day : day;
+			table += monthNames[date.getMonth()]+ ' '+ day+ '\t';
+			for (var i in output)
+				table += times[output[i].toLowerCase()]+ '\t';
+			table += '\n';
+			date.setDate(date.getDate()+ 1);  // next day
+		}
+		return table;
+	}
+
+	function $(id) {
+		return document.getElementById(id);
+	}
+
+</script>
+
+</body>
+</html>
+
+
+
