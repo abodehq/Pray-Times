@@ -12,7 +12,7 @@ You can choose other islamic services by visiting our web site : https://mos7af.
 
 The first step for using PrayTimes in a web-page or widget is to include it using a line like this:
 
- <script type="text/javascript" src="PrayTimes.js"></script> 
+    <script type="text/javascript" src="PrayTimes.js"></script> 
 After including PrayTimes.js, an object named prayTimes is created and is ready to use. We can immediately get the prayer times (using the default settings) from this object. For example, to get today's prayer times for a location with latitude 43, longitude -80, and time zone -5, we can call:
 
     prayTimes.getTimes(new Date(), [43, -80], -5);
@@ -25,7 +25,7 @@ Details of the functions available in PrayTimes along with their description are
 
 The following function is used to retrieve prayer times for a given date and location:
 
-###getTimes (date, coordinates, timezone, dst, format)
+###`getTimes (date, coordinates, timezone, dst, format)`
 The input parameters are described below:
 
 ####date
@@ -38,91 +38,101 @@ The difference to Greenwich time (GMT) in hours. If omitted or set to 'auto', ti
 Daylight Saving Time: 1 if date is in daylight saving time, 0 otherwise. If omitted or set to 'auto', dst is extracted from the system.
 ####format
 Output time format, according to the following table:
-Format  Description	Example
-24h	 24-hour time format	 16:45
-12h	 12-hour time format	 4:45 pm
-12hNS	 12-hour format with no suffix  	 4:45
-Float	 Floating point number	 16.75
-Return Value
 
-getTimes return an associative array containing 9 prayer times (see here for the list of times and their definition). Each time can be accessed thorough its name. For example, if the output of getTimes function is stored in an object times, the time for sunrise can be accessed through times.sunrise.
+| Format | Description                   | Example |
+|--------|-------------------------------|---------|
+| 24h    | 24-hour time format           | 16:45   |
+| 12h    | 12-hour time format           | 4:45 pm |
+| 12hNS  | 12-hour format with no suffix | 4:45    |
+| Float  | Floating point number         | 16.75   |
 
-##Example 1
+####Return Value
+
+`getTimes` return an associative array containing 9 prayer times (see here for the list of times and their definition). Each time can be accessed thorough its name. For example, if the output of getTimes function is stored in an object times, the time for sunrise can be accessed through times.sunrise.
+
+###Example 1
 
     var times = prayTimes.getTimes(new Date(), [43, -80], -5);
     document.write('Sunrise : '+ times.sunrise)
-Set Calculation Method
+##Set Calculation Method
 
 There are several conventions for calculating prayer times. The default convention used in PrayTimes is Muslim World League. You can change the calculation method using the following function:
 
-setMethod (method)
+###`setMethod (method)`
 method can be any of the followings:
 
-Method	Description
-MWL	 Muslim World League
-ISNA	 Islamic Society of North America
-Egypt	 Egyptian General Authority of Survey
-Makkah	 Umm al-Qura University, Makkah
-Karachi	 University of Islamic Sciences, Karachi
-Tehran	 Institute of Geophysics, University of Tehran
-Jafari	 Shia Ithna Ashari (Ja`fari)
+| Method  | Description                                   |
+|---------|-----------------------------------------------|
+| MWL     | Muslim World League                           |
+| ISNA    | Islamic Society of North America              |
+| Egypt   | Egyptian General Authority of Survey          |
+| Makkah  | Umm al-Qura University                        |
+| Karachi | University of Islamic Sciences, Karachi       |
+| Tehran  | Institute of Geophysics, University of Tehran |
+| Jafari  | Shia Ithna Ashari (Ja`fari)                   |
 
 More information on the above calculation methods is provided here.
 
 
-##Example 2
+###Example 2
 
     prayTimes.setMethod('Makkah');
-Adjusting Parameters
+##Adjusting Parameters
 
 The calculating parameters can be adjusted using the following function:
 
-adjust (parameters)
+###`adjust (parameters)`
 parameters is an associative array composed of any number of the following parameters:
 
-Parameter	Values	Description	Sample Value
-imsak	 degrees  	 twilight angle	 18
-minutes	 minutes before fajr	 10 min
-fajr	 degrees	 twilight angle	 15
-dhuhr	 minutes	 minutes after mid-day	 1 min
-asr	 method	 asr juristic method; see the table below	 Standard
-factor	 shadow length factor for realizing asr	 1.7
-maghrib	 degrees	 twilight angle	 4
-minutes	 minutes after sunset	 15 min
-isha	 degrees	 twilight angle	 18
-minutes	 minutes after maghrib	 90 min
-midnight	 method	 midnight method; see the table below	 Standard
-highLats	 method	higher latitudes adjustment; see below	 None
+| Parameter | Values        | Description                   | Sample Value |
+|-----------|---------------|-------------------------------|--------------|
+| imsak     | degrees       | twilight angle                | 18           |
+| minutes   | minutes       | minutes before fajr           | 10 min       |
+| fajr      | degrees       | twilight angle                | 15           |
+| dhuhr     | minutes       | minutes after mid-day         | 1 min        |
+| asr       | method        | asr juristic method *         | Standard     |
+| factor    | shadow length | factor for realizing asr      | 1.7          |
+| maghrib   | degrees       | twilight angle                | 4            |
+| minutes   | minutes       | minutes after maghrib         | 15 min       |
+| isha      | degrees       | twilight angle                | 18           |
+| minutes   | minutes       | minutes after maghrib         | 90 min       |
+| midnight  | method        | midnight method *             | Standard     |
+| highLats  | method        | higher latitudes adjustment * | None         |
 
-asr methods
-Method	Description (more info)
-Standard	 Shafii, Maliki, Jafari and Hanbali (shadow factor = 1)
-Hanafi	 Hanafi school of tought (shadow factor = 2)
+\* means see the following tables.
 
-midnight methods
-Method	Description
-Standard	 The mean time from Sunset to Sunrise
-Jafari	 The mean time from Maghrib to Fajr
+###asr methods
+| Method   | Description (More Info)                                |
+|----------|--------------------------------------------------------|
+| Standard | Shafii, Maliki, Jafari and Hanbali (shadow factor = 1) |
+| Hanafi   | Hanafi school of tought (shadow factor = 2)            |
 
-higher latitudes methods
-Method	Description (more info)
-None	 No adjustments
-NightMiddle	 The middle of the night method
-OneSeventh	 The 1/7th of the night method
-AngleBased	 The angle-based method (recommended)
+###midnight methods
+| Method   | Description                          |
+|----------|--------------------------------------|
+| Standard | The mean time from Sunset to Sunrise |
+| Hanafi   | The mean time from Maghrib to Fajr   |
 
-##Example 3
+###higher latitudes methods
+| Method      | Description (More Info)              |
+|-------------|--------------------------------------|
+| None        | No adjustments                       |
+| NightMiddle | The middle of the night method       |
+| OneSeventh  | The 1/7th of the night method        |
+| AngleBased  | The angle-based method (recommended) |
+
+####Example 3
 
     prayTimes.adjust( {fajr: 16, dhuhr: '5 min', asr: 'Hanafi', isha: 15} );
-Tuning Times
+##Tuning Times
 
 You can further tune calculated prayer times (for precaution) using the following function:
 
-tune (offsets)
+###`tune (offsets)`
 where offsets is an associative array containing time offsets in minutes for each prayer time.
 
 
-##Example 4
+####Example 4
 
     prayTimes.tune( {sunrise: -1, sunset: 3.5} );
 Notes:
