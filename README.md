@@ -3,10 +3,10 @@ Pray Times
 
 Welcome to Pray Times, an Islamic project aimed at providing an open-source library for calculating Muslim prayers times.
 
-Project Source : http://praytimes.org 
-Project Languges Support ( -Java Script -  Python - PHP - Java - C++ - C# - Objective C )
+Project Source : http://praytimes.org  
+Project Languges Support: Java Script, Python, PHP, Java, C++, C#, Objective C
 
-You can choose other islamic services by visiting our web site : https://mos7af.com
+You can choose other islamic services by visiting our web site : <https://mos7af.com>
 
 ##General Usage
 
