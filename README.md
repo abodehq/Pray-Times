@@ -119,13 +119,15 @@ parameters is an associative array composed of any number of the following param
 | midnight	| method	| midnight method; see the table below	| Standard |
 | highLats	| method |	higher latitudes adjustment; see below	| None |
 
+
 **asr methods**
 
 Method	Description (more info)
 
-Standard	 Shafii, Maliki, Jafari and Hanbali (shadow factor = 1)
+`Standard`:	 Shafii, Maliki, Jafari and Hanbali (shadow factor = 1)
 
-Hanafi	 Hanafi school of tought (shadow factor = 2)
+`Hanafi`:	 Hanafi school of thought (shadow factor = 2)
+
 
 **midnight methods**
 
@@ -134,6 +136,7 @@ Method	Description
 `Standard`: The mean time from Sunset to Sunrise
 
 `Jafari`:	 The mean time from Maghrib to Fajr
+
 
 **higher latitudes methods**
 
@@ -146,6 +149,8 @@ Method	Description (more info)
 `OneSeventh`:	 The 1/7th of the night method
 
 `AngleBased`:	 The angle-based method (recommended)
+
+
 
 **Example**
 
