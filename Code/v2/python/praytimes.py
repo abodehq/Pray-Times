@@ -80,6 +80,9 @@ class PrayTimes():
 
 	# Calculation Methods
 	methods = {
+		'SMKA': {
+			'name': 'Calculation Methode for the Assunnah Mosque in Karlsruhe, since 03.2022',
+			'params': {'fajr': 13, 'isha': 14}},
 		'MWL': {
 			'name': 'Muslim World League',
 			'params': { 'fajr': 18, 'isha': 17 } },
@@ -418,16 +421,18 @@ class PrayTimes():
 
 #---------------------- prayTimes Object -----------------------
 
-prayTimes = PrayTimes()
-
+prayTimes = PrayTimes("SMKA")
+SMKA_coordinates = [49.009466696187275, 8.406098655728469, 118]
+SMKA_timezone = 2
 
 #-------------------------- Test Code --------------------------
 
 # sample code to run in standalone mode only
 if __name__ == "__main__":
 	from datetime import date
-	print('Prayer Times for today in Waterloo/Canada\n'+ ('='* 41))
-	times = prayTimes.getTimes(date.today(), (43, -80), -5);
+	today = date.today()
+	print('Prayer Times for today (', today ,') in the Assunnah Mosque in Karlsruhe \n'+ ('='* 75))
+	times = prayTimes.getTimes(today, SMKA_coordinates, SMKA_timezone);
 	for i in ['Fajr', 'Sunrise', 'Dhuhr', 'Asr', 'Maghrib', 'Isha', 'Midnight']:
 		print(i+ ': '+ times[i.lower()])
 
