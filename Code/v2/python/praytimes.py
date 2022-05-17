@@ -134,7 +134,7 @@ class PrayTimes():
 	def __init__(self, method = "MWL") :
 
 		# set methods defaults
-		for method, config in self.methods.items():
+		for config in self.methods.values():
 			for name, value in self.defaultParams.items():
 				if not name in config['params'] or config['params'][name] is None:
 					config['params'][name] = value
