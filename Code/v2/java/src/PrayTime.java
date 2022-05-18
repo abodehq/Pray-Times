@@ -22,8 +22,6 @@ PLEASE DO NOT REMOVE THIS COPYRIGHT BLOCK.
 
 */
 
-package newpackage;
-
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -41,12 +39,14 @@ public class PrayTime {
     private int timeFormat; // time format
     private double lat; // latitude
     private double lng; // longitude
+    private double elev; // elevation
     private double timeZone; // time-zone
     private double JDate; // Julian date
     // ------------------------------------------------------------
     // Calculation Methods
     private int Jafari; // Ithna Ashari
     private int Karachi; // University of Islamic Sciences, Karachi
+    private int SMKA; // Calculation seting for the Assunnah Mosque in Karlsruhe (Germany). 
     private int ISNA; // Islamic Society of North America (ISNA)
     private int MWL; // Muslim World League (MWL)
     private int Makkah; // Umm al-Qura, Makkah
@@ -103,7 +103,8 @@ public class PrayTime {
         this.setEgypt(5); // Egyptian General Authority of Survey
         this.setTehran(6); // Institute of Geophysics, University of Tehran
         this.setCustom(7); // Custom Setting
-
+        this.setSMKA(8); // Calculation setting for the Assunnah Mosque in Karlsruhe
+        
         // Juristic Methods
         this.setShafii(0); // Shafii (standard)
         this.setHanafi(1); // Hanafi
@@ -189,6 +190,10 @@ public class PrayTime {
         // Custom
         double[] Cvalues = {18,1,0,0,17};
         methodParams.put(Integer.valueOf(this.getCustom()), Cvalues);
+
+        // SMKA
+        double[] SMKAvalues = {13,1,0,0,14};
+        methodParams.put(Integer.valueOf(this.getSMKA()), SMKAvalues);
 
     }
 
@@ -391,10 +396,10 @@ public class PrayTime {
 
     // -------------------- Interface Functions --------------------
     // return prayer times for a given date
-    private ArrayList<String> getDatePrayerTimes(int year, int month, int day,
-            double latitude, double longitude, double tZone) {
+    private ArrayList<String> getDatePrayerTimes(int year, int month, int day, double latitude, double longitude, double elevation, double tZone) {
         this.setLat(latitude);
         this.setLng(longitude);
+        this.setElev(elevation);
         this.setTimeZone(tZone);
         this.setJDate(julianDate(year, month, day));
         double lonDiff = longitude / (15.0 * 24.0);
@@ -402,15 +407,18 @@ public class PrayTime {
         return computeDayTimes();
     }
 
+    private ArrayList<String> getPrayerTimes(Calendar date, double latitude, double longitud, double tZone) {
+    	return getPrayerTimes(date, latitude, longitud, 0, tZone);
+    	
+    }
     // return prayer times for a given date
-    private ArrayList<String> getPrayerTimes(Calendar date, double latitude,
-            double longitude, double tZone) {
+    private ArrayList<String> getPrayerTimes(Calendar date, double latitude, double longitude, double elevation, double tZone) {
 
         int year = date.get(Calendar.YEAR);
         int month = date.get(Calendar.MONTH);
         int day = date.get(Calendar.DATE);
 
-        return getDatePrayerTimes(year, month+1, day, latitude, longitude, tZone);
+        return getDatePrayerTimes(year, month+1, day, latitude, longitude, elevation, tZone);
     }
 
     // set custom values for calculation parameters
@@ -544,19 +552,18 @@ public class PrayTime {
 
         double[] t = dayPortion(times);
 
-        double Fajr = this.computeTime(
-                180 - methodParams.get(this.getCalcMethod())[0], t[0]);
+        double Fajr = this.computeTime(180 - methodParams.get(this.getCalcMethod())[0], t[0]);
         
-        double Sunrise = this.computeTime(180 - 0.833, t[1]);
+//        double Sunrise = this.computeTime(180 - 0.833, t[1]);
+        double Sunrise = this.computeTime(sunriseAngle(this.getElev()), t[1]);
         
         double Dhuhr = this.computeMidDay(t[2]);
         double Asr = this.computeAsr(1 + this.getAsrJuristic(), t[3]);
-        double Sunset = this.computeTime(0.833, t[4]);
+//        double Sunset = this.computeTime(0.833, t[4]);
+        double Sunset = this.computeTime(sunsetAngle(this.getElev()), t[4]);
         
-        double Maghrib = this.computeTime(
-                methodParams.get(this.getCalcMethod())[2], t[5]);
-        double Isha = this.computeTime(
-                methodParams.get(this.getCalcMethod())[4], t[6]);
+        double Maghrib = this.computeTime(methodParams.get(this.getCalcMethod())[2], t[5]);
+        double Isha = this.computeTime(methodParams.get(this.getCalcMethod())[4], t[6]);
 
         double[] CTimes = {Fajr, Sunrise, Dhuhr, Asr, Sunset, Maghrib, Isha};
         
@@ -564,7 +571,23 @@ public class PrayTime {
 
     }
 
-    // compute prayer times at given julian date
+    /**
+		 * @param elevation
+		 * @return
+		 */
+		private double sunsetAngle(double elevation) {
+			return 0.833 + 0.0347 * Math.sqrt(elevation);
+		}
+		
+		/**
+		 * @param elevation
+		 * @return
+		 */
+		private double sunriseAngle(double elevation) {
+			return 180 - sunsetAngle(elevation);
+		}
+
+		// compute prayer times at given julian date
     private ArrayList<String> computeDayTimes() {
         double[] times = {5, 6, 12, 13, 18, 18, 18}; // default times
 
@@ -699,15 +722,16 @@ public class PrayTime {
     /**
      * @param args
      */
-    public static void main(String[] args) {
-        double latitude = -37.823689;
-        double longitude = 145.121597;
-        double timezone = 10;
+    public static void main(String[] args) { //49.009466696187275, 8.406098655728469, 118
+        double latitude = 49.009466696187275;
+        double longitude = 8.406098655728469;
+        double elevation = 118;
+        double timezone = 2;
         // Test Prayer times here
         PrayTime prayers = new PrayTime();
 
         prayers.setTimeFormat(prayers.Time12);
-        prayers.setCalcMethod(prayers.Jafari);
+        prayers.setCalcMethod(prayers.SMKA);
         prayers.setAsrJuristic(prayers.Shafii);
         prayers.setAdjustHighLats(prayers.AngleBased);
         int[] offsets = {0, 0, 0, 0, 0, 0, 0}; // {Fajr,Sunrise,Dhuhr,Asr,Sunset,Maghrib,Isha}
@@ -717,13 +741,16 @@ public class PrayTime {
         Calendar cal = Calendar.getInstance();
         cal.setTime(now);
 
-        ArrayList<String> prayerTimes = prayers.getPrayerTimes(cal,
-                latitude, longitude, timezone);
+        ArrayList<String> prayerTimes = prayers.getPrayerTimes(cal, latitude, longitude, elevation, timezone);
         ArrayList<String> prayerNames = prayers.getTimeNames();
 
-        for (int i = 0; i < prayerTimes.size(); i++) {
-            System.out.println(prayerNames.get(i) + " - " + prayerTimes.get(i));
-        }
+        System.out.println("Prayer Times for today (" + now + ") in the Assunnah Mosque in Karlsruhe: ");
+//        for (int i = 0; i < prayerTimes.size(); i++) {
+//            System.out.println(prayerNames.get(i) + " - " + prayerTimes.get(i));
+//        }
+        for (int i = 0; i < prayerNames.size(); i++) {
+          System.out.println(prayerNames.get(i) + ": " + prayerTimes.get(i));
+      }
 
     }
 
@@ -782,6 +809,14 @@ public class PrayTime {
     public void setLng(double lng) {
         this.lng = lng;
     }
+    
+    public double getElev() {
+    	return elev;
+    }
+    
+    public void setElev(double elv) {
+    	this.elev = elev;
+    }
 
     public double getTimeZone() {
         return timeZone;
@@ -818,7 +853,7 @@ public class PrayTime {
     private int getISNA() {
         return ISNA;
     }
-
+    
     private void setISNA(int iSNA) {
         ISNA = iSNA;
     }
@@ -853,6 +888,14 @@ public class PrayTime {
 
     private void setCustom(int custom) {
         Custom = custom;
+    }
+    
+    private int getSMKA() {
+    	return SMKA;
+    }
+    
+    private void setSMKA(int SMKA) {
+    	this.SMKA = SMKA;
     }
 
     private int getTehran() {
