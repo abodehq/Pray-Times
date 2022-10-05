@@ -23,6 +23,16 @@ PLEASE DO NOT REMOVE THIS COPYRIGHT BLOCK.
 */
 
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -589,7 +599,7 @@ public class PrayTime {
 		// compute prayer times at given julian date
     private Map<AstroEvents, String> computeDayTimes() {
 //        double[] times = {5, 6, 12, 13, 18, 18, 18}; // default times
-        Map<AstroEvents, Double> astroEventToTime = new HashMap() {{
+        Map<AstroEvents, Double> astroEventToTime = new HashMap<AstroEvents, Double>() {{
         	put(AstroEvents.Fajr, 5.0);
         	put(AstroEvents.Sunrise, 6.0);
         	put(AstroEvents.Dhuhr, 12.0);
@@ -735,12 +745,17 @@ public class PrayTime {
 
     /**
      * @param args
+     * @throws ParseException 
      */
-    public static void main(String[] args) { //49.009466696187275, 8.406098655728469, 118
+    public static void main(String[] args) throws ParseException { //49.009466696187275, 8.406098655728469, 118
         double latitude = 49.009466696187275;
         double longitude = 8.406098655728469;
         double elevation = 118;
-        double timezone = 2;
+        int timezone = 2;
+
+        // Handling DST
+        ZoneId germnayZoneId = ZoneId.of("Europe/Berlin");
+        
         // Test Prayer times here
         PrayTime prayers = new PrayTime();
 
@@ -751,16 +766,28 @@ public class PrayTime {
         prayers.tune(prayers.offsets);
         
         Date now = new Date();
+        LocalDate localNow = LocalDate.now();
+        SimpleDateFormat dayFormatter = new SimpleDateFormat("dd.MM.yyyy"); 
+        if (args.length > 0) {
+        	now = dayFormatter.parse(args[0]);
+        	localNow = LocalDate.parse(args[0], DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        }
+        
         Calendar cal = Calendar.getInstance();
         cal.setTime(now);
 
         Map<AstroEvents, String> prayerTimes = prayers.getPrayerTimes(cal, latitude, longitude, elevation, timezone);
 
-        System.out.println("Prayer Times for today (" + now + ") in the Assunnah Mosque in Karlsruhe: ");
-        for (AstroEvents dayTime : AstroEvents.values()) {
-        	System.out.println(dayTime.name() + ": " + prayerTimes.get(dayTime));
-        	
+        String dict = "{";
+        for (AstroEvents astroEvent : AstroEvents.values()) {
+        	LocalDateTime time_wo_dst = LocalTime.parse(prayerTimes.get(astroEvent)).atDate(localNow);
+        	Instant instant_wo_dst = time_wo_dst.toInstant(ZoneOffset.ofHours(timezone));
+        	ZonedDateTime instant_w_dst = instant_wo_dst.atZone(germnayZoneId);
+        	dict = dict + astroEvent.name() + ":" + instant_w_dst.format(DateTimeFormatter.ofPattern("HH:mm")) + ",";
         }
+        dict = dict + "}";
+        System.out.println(dict);
+        
     }
 
     public int getCalcMethod() {
