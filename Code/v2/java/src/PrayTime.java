@@ -257,7 +257,8 @@ public class PrayTime {
     }
 
     // degree arctan
-    private double darctan(double x) {
+    @SuppressWarnings("unused")
+		private double darctan(double x) {
         double val = Math.atan(x);
         return radiansToDegrees(val);
     }
@@ -276,14 +277,16 @@ public class PrayTime {
 
     // ---------------------- Time-Zone Functions -----------------------
     // compute local time-zone for a specific date
-    private double getTimeZone1() {
+    @SuppressWarnings("unused")
+		private double getTimeZone1() {
         TimeZone timez = TimeZone.getDefault();
         double hoursDiff = (timez.getRawOffset() / 1000.0) / 3600;
         return hoursDiff;
     }
 
     // compute base time-zone of the system
-    private double getBaseTimeZone() {
+    @SuppressWarnings("unused")
+		private double getBaseTimeZone() {
         TimeZone timez = TimeZone.getDefault();
         double hoursDiff = (timez.getRawOffset() / 1000.0) / 3600;
         return hoursDiff;
@@ -291,7 +294,8 @@ public class PrayTime {
     }
 
     // detect daylight saving in a given date
-    private double detectDaylightSaving() {
+    @SuppressWarnings("unused")
+		private double detectDaylightSaving() {
         TimeZone timez = TimeZone.getDefault();
         double hoursDiff = timez.getDSTSavings();
         return hoursDiff;
@@ -316,7 +320,8 @@ public class PrayTime {
     }
 
     // convert a calendar date to julian date (second method)
-    private double calcJD(int year, int month, int day) {
+    @SuppressWarnings({"unused", "deprecation"})
+		private double calcJD(int year, int month, int day) {
         double J1970 = 2440588.0;
         Date date = new Date(year, month - 1, day);
         
@@ -411,7 +416,8 @@ public class PrayTime {
         return computeDayTimes();
     }
 
-    private Map<AstroEvents, String> getPrayerTimes(Calendar date, double latitude, double longitud, double tZone) {
+    @SuppressWarnings("unused")
+		private Map<AstroEvents, String> getPrayerTimes(Calendar date, double latitude, double longitud, double tZone) {
     	return getPrayerTimes(date, latitude, longitud, 0, tZone);
     	
     }
@@ -599,15 +605,17 @@ public class PrayTime {
 		// compute prayer times at given julian date
     private Map<AstroEvents, String> computeDayTimes() {
 //        double[] times = {5, 6, 12, 13, 18, 18, 18}; // default times
-        Map<AstroEvents, Double> astroEventToTime = new HashMap<AstroEvents, Double>() {{
-        	put(AstroEvents.Fajr, 5.0);
-        	put(AstroEvents.Sunrise, 6.0);
-        	put(AstroEvents.Dhuhr, 12.0);
-        	put(AstroEvents.Asr, 13.0);
-        	put(AstroEvents.Sunset, 18.0);
-        	put(AstroEvents.Maghrib, 18.0);
-        	put(AstroEvents.Isha, 18.0);
-        }};
+        Map<AstroEvents, Double> astroEventToTime = new HashMap<AstroEvents, Double>() {
+					private static final long serialVersionUID = 1599875645524655898L;
+					{
+						put(AstroEvents.Fajr, 5.0);
+						put(AstroEvents.Sunrise, 6.0);
+						put(AstroEvents.Dhuhr, 12.0);
+						put(AstroEvents.Asr, 13.0);
+						put(AstroEvents.Sunset, 18.0);
+						put(AstroEvents.Maghrib, 18.0);
+						put(AstroEvents.Isha, 18.0);
+					}};
 
         for (int i = 1; i <= this.getNumIterations(); i++) {
             astroEventToTime = computeTimes(astroEventToTime);
@@ -942,7 +950,8 @@ public class PrayTime {
         Tehran = tehran;
     }
 
-    private int getShafii() {
+    @SuppressWarnings("unused")
+		private int getShafii() {
         return Shafii;
     }
 
@@ -950,7 +959,8 @@ public class PrayTime {
         Shafii = shafii;
     }
 
-    private int getHanafi() {
+    @SuppressWarnings("unused")
+		private int getHanafi() {
         return Hanafi;
     }
 
@@ -966,7 +976,8 @@ public class PrayTime {
         None = none;
     }
 
-    private int getMidNight() {
+    @SuppressWarnings("unused")
+		private int getMidNight() {
         return MidNight;
     }
 
@@ -974,7 +985,8 @@ public class PrayTime {
         MidNight = midNight;
     }
 
-    private int getOneSeventh() {
+    @SuppressWarnings("unused")
+		private int getOneSeventh() {
         return OneSeventh;
     }
 
@@ -982,7 +994,8 @@ public class PrayTime {
         OneSeventh = oneSeventh;
     }
 
-    private int getAngleBased() {
+    @SuppressWarnings("unused")
+		private int getAngleBased() {
         return AngleBased;
     }
 
@@ -990,7 +1003,8 @@ public class PrayTime {
         AngleBased = angleBased;
     }
 
-    private int getTime24() {
+    @SuppressWarnings("unused")
+		private int getTime24() {
         return Time24;
     }
 
