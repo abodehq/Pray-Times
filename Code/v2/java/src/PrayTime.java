@@ -22,16 +22,36 @@ PLEASE DO NOT REMOVE THIS COPYRIGHT BLOCK.
 
 */
 
-package newpackage;
 
-
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.TimeZone;
 
 public class PrayTime {
+	
+		public static enum AstroEvents {
+			 Fajr,
+       Sunrise,
+       Dhuhr,
+       Asr,
+       Sunset,
+       Maghrib,
+       Isha,
+       Midnight
+		}
 
     // ---------------------- Global Variables --------------------
     private int calcMethod; // caculation method
@@ -41,12 +61,14 @@ public class PrayTime {
     private int timeFormat; // time format
     private double lat; // latitude
     private double lng; // longitude
+    private double elev; // elevation
     private double timeZone; // time-zone
     private double JDate; // Julian date
     // ------------------------------------------------------------
     // Calculation Methods
     private int Jafari; // Ithna Ashari
     private int Karachi; // University of Islamic Sciences, Karachi
+    private int SMKA; // Calculation seting for the Assunnah Mosque in Karlsruhe (Germany). 
     private int ISNA; // Islamic Society of North America (ISNA)
     private int MWL; // Muslim World League (MWL)
     private int Makkah; // Umm al-Qura, Makkah
@@ -82,8 +104,7 @@ public class PrayTime {
      * selector (0 = angle; 1 = minutes after maghrib) iv : isha parameter value
      * (in angle or minutes)
      */
-    private double[] prayerTimesCurrent;
-    private int[] offsets;
+    private Map<AstroEvents, Double> offsets;
 
     public PrayTime() {
         // Initialize vars
@@ -103,7 +124,8 @@ public class PrayTime {
         this.setEgypt(5); // Egyptian General Authority of Survey
         this.setTehran(6); // Institute of Geophysics, University of Tehran
         this.setCustom(7); // Custom Setting
-
+        this.setSMKA(8); // Calculation setting for the Assunnah Mosque in Karlsruhe
+        
         // Juristic Methods
         this.setShafii(0); // Shafii (standard)
         this.setHanafi(1); // Hanafi
@@ -120,16 +142,6 @@ public class PrayTime {
         this.setTime12NS(2); // 12-hour format with no suffix
         this.setFloating(3); // floating point number
 
-        // Time Names
-        timeNames = new ArrayList<String>();
-        timeNames.add("Fajr");
-        timeNames.add("Sunrise");
-        timeNames.add("Dhuhr");
-        timeNames.add("Asr");
-        timeNames.add("Sunset");
-        timeNames.add("Maghrib");
-        timeNames.add("Isha");
-
         InvalidTime = "-----"; // The string used for invalid times
 
         // --------------------- Technical Settings --------------------
@@ -138,17 +150,11 @@ public class PrayTime {
         // times
 
         // ------------------- Calc Method Parameters --------------------
-
-        // Tuning offsets {fajr, sunrise, dhuhr, asr, sunset, maghrib, isha}
-        offsets = new int[7];
-        offsets[0] = 0;
-        offsets[1] = 0;
-        offsets[2] = 0;
-        offsets[3] = 0;
-        offsets[4] = 0;
-        offsets[5] = 0;
-        offsets[6] = 0;
-
+        offsets = new HashMap<>();
+        for (AstroEvents astroEvent : AstroEvents.values()) {
+        	offsets.put(astroEvent, 0.0);
+        }
+        
         /*
          *
          * fa : fajr angle ms : maghrib selector (0 = angle; 1 = minutes after
@@ -190,6 +196,10 @@ public class PrayTime {
         double[] Cvalues = {18,1,0,0,17};
         methodParams.put(Integer.valueOf(this.getCustom()), Cvalues);
 
+        // SMKA
+        double[] SMKAvalues = {13,0,0,0,14};
+        methodParams.put(Integer.valueOf(this.getSMKA()), SMKAvalues);
+
     }
 
     // ---------------------- Trigonometric Functions -----------------------
@@ -205,9 +215,8 @@ public class PrayTime {
 
     // range reduce hours to 0..23
     private double fixhour(double a) {
-        a = a - 24.0 * Math.floor(a / 24.0);
-        a = a < 0 ? (a + 24) : a;
-        return a;
+        a = a - (24.0 * Math.floor(a / 24.0));
+        return a < 0 ? (a + 24) : a;
     }
 
     // radian to degree
@@ -248,7 +257,8 @@ public class PrayTime {
     }
 
     // degree arctan
-    private double darctan(double x) {
+    @SuppressWarnings("unused")
+		private double darctan(double x) {
         double val = Math.atan(x);
         return radiansToDegrees(val);
     }
@@ -267,14 +277,16 @@ public class PrayTime {
 
     // ---------------------- Time-Zone Functions -----------------------
     // compute local time-zone for a specific date
-    private double getTimeZone1() {
+    @SuppressWarnings("unused")
+		private double getTimeZone1() {
         TimeZone timez = TimeZone.getDefault();
         double hoursDiff = (timez.getRawOffset() / 1000.0) / 3600;
         return hoursDiff;
     }
 
     // compute base time-zone of the system
-    private double getBaseTimeZone() {
+    @SuppressWarnings("unused")
+		private double getBaseTimeZone() {
         TimeZone timez = TimeZone.getDefault();
         double hoursDiff = (timez.getRawOffset() / 1000.0) / 3600;
         return hoursDiff;
@@ -282,7 +294,8 @@ public class PrayTime {
     }
 
     // detect daylight saving in a given date
-    private double detectDaylightSaving() {
+    @SuppressWarnings("unused")
+		private double detectDaylightSaving() {
         TimeZone timez = TimeZone.getDefault();
         double hoursDiff = timez.getDSTSavings();
         return hoursDiff;
@@ -307,7 +320,8 @@ public class PrayTime {
     }
 
     // convert a calendar date to julian date (second method)
-    private double calcJD(int year, int month, int day) {
+    @SuppressWarnings({"unused", "deprecation"})
+		private double calcJD(int year, int month, int day) {
         double J1970 = 2440588.0;
         Date date = new Date(year, month - 1, day);
         
@@ -391,10 +405,10 @@ public class PrayTime {
 
     // -------------------- Interface Functions --------------------
     // return prayer times for a given date
-    private ArrayList<String> getDatePrayerTimes(int year, int month, int day,
-            double latitude, double longitude, double tZone) {
+    private Map<AstroEvents, String> getDatePrayerTimes(int year, int month, int day, double latitude, double longitude, double elevation, double tZone) {
         this.setLat(latitude);
         this.setLng(longitude);
+        this.setElev(elevation);
         this.setTimeZone(tZone);
         this.setJDate(julianDate(year, month, day));
         double lonDiff = longitude / (15.0 * 24.0);
@@ -402,15 +416,19 @@ public class PrayTime {
         return computeDayTimes();
     }
 
+    @SuppressWarnings("unused")
+		private Map<AstroEvents, String> getPrayerTimes(Calendar date, double latitude, double longitud, double tZone) {
+    	return getPrayerTimes(date, latitude, longitud, 0, tZone);
+    	
+    }
     // return prayer times for a given date
-    private ArrayList<String> getPrayerTimes(Calendar date, double latitude,
-            double longitude, double tZone) {
+    private Map<AstroEvents, String> getPrayerTimes(Calendar date, double latitude, double longitude, double elevation, double tZone) {
 
         int year = date.get(Calendar.YEAR);
         int month = date.get(Calendar.MONTH);
         int day = date.get(Calendar.DATE);
 
-        return getDatePrayerTimes(year, month+1, day, latitude, longitude, tZone);
+        return getDatePrayerTimes(year, month+1, day, latitude, longitude, elevation, tZone);
     }
 
     // set custom values for calculation parameters
@@ -540,191 +558,244 @@ public class PrayTime {
 
     // ---------------------- Compute Prayer Times -----------------------
     // compute prayer times at given julian date
-    private double[] computeTimes(double[] times) {
+    private Map<AstroEvents, Double> computeTimes(Map<AstroEvents, Double> astroEventToTime) {
 
-        double[] t = dayPortion(times);
+    		Map<AstroEvents, Double> t = dayPortion(astroEventToTime);
 
-        double Fajr = this.computeTime(
-                180 - methodParams.get(this.getCalcMethod())[0], t[0]);
+        double Fajr = this.computeTime(180 - methodParams.get(this.getCalcMethod())[0], t.get(AstroEvents.Fajr));
+        astroEventToTime.put(AstroEvents.Fajr, Fajr);
         
-        double Sunrise = this.computeTime(180 - 0.833, t[1]);
+        double Sunrise = this.computeTime(sunriseAngle(this.getElev()), t.get(AstroEvents.Sunrise));
+        astroEventToTime.put(AstroEvents.Sunrise, Sunrise);
         
-        double Dhuhr = this.computeMidDay(t[2]);
-        double Asr = this.computeAsr(1 + this.getAsrJuristic(), t[3]);
-        double Sunset = this.computeTime(0.833, t[4]);
+        double Dhuhr = this.computeMidDay(t.get(AstroEvents.Dhuhr));
+        astroEventToTime.put(AstroEvents.Dhuhr, Dhuhr);
         
-        double Maghrib = this.computeTime(
-                methodParams.get(this.getCalcMethod())[2], t[5]);
-        double Isha = this.computeTime(
-                methodParams.get(this.getCalcMethod())[4], t[6]);
+        double Asr = this.computeAsr(1 + this.getAsrJuristic(), t.get(AstroEvents.Asr));
+        astroEventToTime.put(AstroEvents.Asr, Asr);
 
-        double[] CTimes = {Fajr, Sunrise, Dhuhr, Asr, Sunset, Maghrib, Isha};
+        double Sunset = this.computeTime(sunsetAngle(this.getElev()), t.get(AstroEvents.Sunset));
+        astroEventToTime.put(AstroEvents.Sunset, Sunset);
         
-        return CTimes;
+        double Maghrib = this.computeTime(methodParams.get(this.getCalcMethod())[2], t.get(AstroEvents.Maghrib));
+        astroEventToTime.put(AstroEvents.Maghrib, Maghrib);
 
+        double Isha = this.computeTime(methodParams.get(this.getCalcMethod())[4], t.get(AstroEvents.Isha));
+        astroEventToTime.put(AstroEvents.Isha, Isha);
+
+        return astroEventToTime;
     }
 
-    // compute prayer times at given julian date
-    private ArrayList<String> computeDayTimes() {
-        double[] times = {5, 6, 12, 13, 18, 18, 18}; // default times
+    /**
+		 * @param elevation
+		 * @return
+		 */
+		private double sunsetAngle(double elevation) {
+			return 0.833 + (0.0347 * Math.sqrt(elevation));
+		}
+		
+		/**
+		 * @param elevation
+		 * @return
+		 */
+		private double sunriseAngle(double elevation) {
+			return 180 - sunsetAngle(elevation);
+		}
+
+		// compute prayer times at given julian date
+    private Map<AstroEvents, String> computeDayTimes() {
+//        double[] times = {5, 6, 12, 13, 18, 18, 18}; // default times
+        Map<AstroEvents, Double> astroEventToTime = new HashMap<AstroEvents, Double>() {
+					private static final long serialVersionUID = 1599875645524655898L;
+					{
+						put(AstroEvents.Fajr, 5.0);
+						put(AstroEvents.Sunrise, 6.0);
+						put(AstroEvents.Dhuhr, 12.0);
+						put(AstroEvents.Asr, 13.0);
+						put(AstroEvents.Sunset, 18.0);
+						put(AstroEvents.Maghrib, 18.0);
+						put(AstroEvents.Isha, 18.0);
+					}};
 
         for (int i = 1; i <= this.getNumIterations(); i++) {
-            times = computeTimes(times);
+            astroEventToTime = computeTimes(astroEventToTime);
         }
         
-        times = adjustTimes(times);
-        times = tuneTimes(times);
+        astroEventToTime = adjustTimes(astroEventToTime);
+        // add midnight time
+        double sunsetTime = astroEventToTime.get(AstroEvents.Sunset);
+    		if (calcMethod == this.Jafari) {
+    			astroEventToTime.put(AstroEvents.Midnight, sunsetTime + (timeDiff(sunsetTime, astroEventToTime.get(AstroEvents.Fajr))/2));
+    		} else {
+    			astroEventToTime.put(AstroEvents.Midnight, sunsetTime + (timeDiff(sunsetTime, astroEventToTime.get(AstroEvents.Sunrise))/2));
+    		}
+        astroEventToTime = tuneTimes(astroEventToTime);
         
-        return adjustTimesFormat(times);
+        return adjustTimesFormat(astroEventToTime);
     }
 
     // adjust times in a prayer time array
-    private double[] adjustTimes(double[] times) {
-        for (int i = 0; i < times.length; i++) {
-            times[i] += this.getTimeZone() - this.getLng() / 15;
+    private Map<AstroEvents, Double> adjustTimes(Map<AstroEvents, Double> astroEventToTime) {
+        for (AstroEvents prayer : astroEventToTime.keySet()) {
+        	  double currentTime = astroEventToTime.get(prayer);
+            astroEventToTime.put(prayer, currentTime + (this.getTimeZone() - this.getLng() / 15));
         }
-         
-        times[2] += this.getDhuhrMinutes() / 60; // Dhuhr
-        if (methodParams.get(this.getCalcMethod())[1] == 1) // Maghrib
-        {
-            times[5] = times[4] + methodParams.get(this.getCalcMethod())[2]/ 60;
+        
+        double currentDhuhrTime = astroEventToTime.get(AstroEvents.Dhuhr);
+        astroEventToTime.put(AstroEvents.Dhuhr, currentDhuhrTime + (this.getDhuhrMinutes() / 60)); // Dhuhr
+        if (methodParams.get(this.getCalcMethod())[1] == 1) { // Maghrib
+            astroEventToTime.put(AstroEvents.Maghrib, astroEventToTime.get(AstroEvents.Dhuhr) + (methodParams.get(this.getCalcMethod())[2]/ 60));
         }
-        if (methodParams.get(this.getCalcMethod())[3] == 1) // Isha
-        {
-            times[6] = times[5] + methodParams.get(this.getCalcMethod())[4]/ 60;
+        if (methodParams.get(this.getCalcMethod())[3] == 1) { // Isha
+            astroEventToTime.put(AstroEvents.Isha, astroEventToTime.get(AstroEvents.Maghrib) + (methodParams.get(this.getCalcMethod())[4]/ 60));
         }
         
         if (this.getAdjustHighLats() != this.getNone()) {
-            times = adjustHighLatTimes(times);
+        	astroEventToTime = adjustHighLatTimes(astroEventToTime);
         }
         
-        return times;
+        return astroEventToTime;
     }
 
     // convert times array to given time format
-    private ArrayList<String> adjustTimesFormat(double[] times) {
-
-        ArrayList<String> result = new ArrayList<String>();
+    private Map<AstroEvents, String> adjustTimesFormat(Map<AstroEvents, Double> astroEventToTime) {
+    	  Map<AstroEvents, String> astroEventToTimeStr = new HashMap<>();
 
         if (this.getTimeFormat() == this.getFloating()) {
-            for (double time : times) {
-                result.add(String.valueOf(time));
+            for (AstroEvents dayTime : astroEventToTime.keySet()) {
+            	astroEventToTimeStr.put(dayTime, String.valueOf(astroEventToTime.get(dayTime)));
             }
-            return result;
+            return astroEventToTimeStr;
         }
 
-        for (int i = 0; i < 7; i++) {
+        for (AstroEvents dayTime : astroEventToTime.keySet()) {
             if (this.getTimeFormat() == this.getTime12()) {
-                result.add(floatToTime12(times[i], false));
+                astroEventToTimeStr.put(dayTime, floatToTime12(astroEventToTime.get(dayTime), false));
             } else if (this.getTimeFormat() == this.getTime12NS()) {
-                result.add(floatToTime12(times[i], true));
+            		astroEventToTimeStr.put(dayTime, floatToTime12(astroEventToTime.get(dayTime), true));
             } else {
-                result.add(floatToTime24(times[i]));
+            		astroEventToTimeStr.put(dayTime, floatToTime24(astroEventToTime.get(dayTime)));
             }
         }
-        return result;
+        return astroEventToTimeStr;
     }
 
     // adjust Fajr, Isha and Maghrib for locations in higher latitudes
-    private double[] adjustHighLatTimes(double[] times) {
-        double nightTime = timeDiff(times[4], times[1]); // sunset to sunrise
+    private Map<AstroEvents, Double> adjustHighLatTimes(Map<AstroEvents, Double> astroEventToTime) {
+        double nightTime = timeDiff(astroEventToTime.get(AstroEvents.Sunset), astroEventToTime.get(AstroEvents.Sunrise)); // sunset to sunrise
         
         // Adjust Fajr
         double FajrDiff = nightPortion(methodParams.get(this.getCalcMethod())[0]) * nightTime;
         
-        if (Double.isNaN(times[0]) || timeDiff(times[0], times[1]) > FajrDiff) {
-            times[0] = times[1] - FajrDiff;
+        if (Double.isNaN(astroEventToTime.get(AstroEvents.Fajr)) || timeDiff(astroEventToTime.get(AstroEvents.Fajr), astroEventToTime.get(AstroEvents.Sunrise)) > FajrDiff) {
+        		astroEventToTime.put(AstroEvents.Fajr, astroEventToTime.get(AstroEvents.Sunrise) - FajrDiff);
         }
 
         // Adjust Isha
         double IshaAngle = (methodParams.get(this.getCalcMethod())[3] == 0) ? methodParams.get(this.getCalcMethod())[4] : 18;
         double IshaDiff = this.nightPortion(IshaAngle) * nightTime;
-        if (Double.isNaN(times[6]) || this.timeDiff(times[4], times[6]) > IshaDiff) {
-            times[6] = times[4] + IshaDiff;
+        if (Double.isNaN(astroEventToTime.get(AstroEvents.Isha)) || this.timeDiff(astroEventToTime.get(AstroEvents.Sunset), astroEventToTime.get(AstroEvents.Isha)) > IshaDiff) {
+        	astroEventToTime.put(AstroEvents.Isha, astroEventToTime.get(AstroEvents.Sunset) + IshaDiff);
         }
 
         // Adjust Maghrib
         double MaghribAngle = (methodParams.get(this.getCalcMethod())[1] == 0) ? methodParams.get(this.getCalcMethod())[2] : 4;
         double MaghribDiff = nightPortion(MaghribAngle) * nightTime;
-        if (Double.isNaN(times[5]) || this.timeDiff(times[4], times[5]) > MaghribDiff) {
-            times[5] = times[4] + MaghribDiff;
+        if (Double.isNaN(astroEventToTime.get(AstroEvents.Maghrib)) || this.timeDiff(astroEventToTime.get(AstroEvents.Sunset), astroEventToTime.get(AstroEvents.Maghrib)) > MaghribDiff) {
+        	astroEventToTime.put(AstroEvents.Maghrib, astroEventToTime.get(AstroEvents.Sunset) + MaghribDiff);
         }
         
-        return times;
+        return astroEventToTime;
     }
 
     // the night portion used for adjusting times in higher latitudes
     private double nightPortion(double angle) {
        double calc = 0;
 
-	if (adjustHighLats == AngleBased)
-		calc = (angle)/60.0;
-	else if (adjustHighLats == MidNight)
-		calc = 0.5;
-	else if (adjustHighLats == OneSeventh)
-		calc = 0.14286;
+       if (adjustHighLats == AngleBased)
+      	 calc = (angle)/60.0;
+       else if (adjustHighLats == MidNight)
+      	 calc = 0.5;
+       else if (adjustHighLats == OneSeventh)
+      	 calc = 0.14286;
 
-	return calc;
+       return calc;
     }
 
     // convert hours to day portions
-    private double[] dayPortion(double[] times) {
-        for (int i = 0; i < 7; i++) {
-            times[i] /= 24;
+    private Map<AstroEvents, Double> dayPortion(Map<AstroEvents, Double> astroEventToTime) {
+    		Map<AstroEvents, Double> dayEventToPortion = new HashMap<>();
+        for (AstroEvents prayer : astroEventToTime.keySet()) {
+        	dayEventToPortion.put(prayer, astroEventToTime.get(prayer)/24);
         }
-        return times;
+        return dayEventToPortion;
     }
 
     // Tune timings for adjustments
     // Set time offsets
-    public void tune(int[] offsetTimes) {
+    public void tune(Map<AstroEvents, Double> offsetTimes) {
 
-        for (int i = 0; i < offsetTimes.length; i++) { // offsetTimes length
-            // should be 7 in order
-            // of Fajr, Sunrise,
-            // Dhuhr, Asr, Sunset,
-            // Maghrib, Isha
-            this.offsets[i] = offsetTimes[i];
+        for (AstroEvents dayTime : AstroEvents.values() ) {
+        		Double offsetUpdate = offsetTimes.get(dayTime);
+        		if (offsetUpdate != null) {
+        			offsets.put(dayTime, offsetTimes.get(dayTime));
+        		}
         }
     }
 
-    private double[] tuneTimes(double[] times) {
-        for (int i = 0; i < times.length; i++) {
-            times[i] = times[i] + this.offsets[i] / 60.0;
+    private Map<AstroEvents, Double> tuneTimes(Map<AstroEvents, Double> astroEventToTime) {
+        for (AstroEvents dayTime : astroEventToTime.keySet()) {
+        		double thisPrayerTime = astroEventToTime.get(dayTime);
+            astroEventToTime.put(dayTime, thisPrayerTime + (this.offsets.get(dayTime) / 60.0));
         }
-
-        return times;
+        return astroEventToTime;
     }
 
     /**
      * @param args
+     * @throws ParseException 
      */
-    public static void main(String[] args) {
-        double latitude = -37.823689;
-        double longitude = 145.121597;
-        double timezone = 10;
+    public static void main(String[] args) throws ParseException { //49.009466696187275, 8.406098655728469, 118
+        double latitude = 49.009466696187275;
+        double longitude = 8.406098655728469;
+        double elevation = 118;
+        int timezone = 2;
+
+        // Handling DST
+        ZoneId germnayZoneId = ZoneId.of("Europe/Berlin");
+        
         // Test Prayer times here
         PrayTime prayers = new PrayTime();
 
-        prayers.setTimeFormat(prayers.Time12);
-        prayers.setCalcMethod(prayers.Jafari);
+        prayers.setTimeFormat(prayers.Time24);
+        prayers.setCalcMethod(prayers.SMKA);
         prayers.setAsrJuristic(prayers.Shafii);
         prayers.setAdjustHighLats(prayers.AngleBased);
-        int[] offsets = {0, 0, 0, 0, 0, 0, 0}; // {Fajr,Sunrise,Dhuhr,Asr,Sunset,Maghrib,Isha}
-        prayers.tune(offsets);
-
+        prayers.tune(prayers.offsets);
+        
         Date now = new Date();
+        LocalDate localNow = LocalDate.now();
+        SimpleDateFormat dayFormatter = new SimpleDateFormat("dd.MM.yyyy"); 
+        if (args.length > 0) {
+        	now = dayFormatter.parse(args[0]);
+        	localNow = LocalDate.parse(args[0], DateTimeFormatter.ofPattern("dd.MM.yyyy"));
+        }
+        
         Calendar cal = Calendar.getInstance();
         cal.setTime(now);
 
-        ArrayList<String> prayerTimes = prayers.getPrayerTimes(cal,
-                latitude, longitude, timezone);
-        ArrayList<String> prayerNames = prayers.getTimeNames();
+        Map<AstroEvents, String> prayerTimes = prayers.getPrayerTimes(cal, latitude, longitude, elevation, timezone);
 
-        for (int i = 0; i < prayerTimes.size(); i++) {
-            System.out.println(prayerNames.get(i) + " - " + prayerTimes.get(i));
+        String dict = "{";
+        for (AstroEvents astroEvent : AstroEvents.values()) {
+        	LocalDateTime time_wo_dst = LocalTime.parse(prayerTimes.get(astroEvent)).atDate(localNow);
+        	Instant instant_wo_dst = time_wo_dst.toInstant(ZoneOffset.ofHours(timezone));
+        	ZonedDateTime instant_w_dst = instant_wo_dst.atZone(germnayZoneId);
+        	dict = dict + astroEvent.name() + ":" + instant_w_dst.format(DateTimeFormatter.ofPattern("HH:mm")) + ",";
         }
-
+        dict = dict + "}";
+        System.out.println(dict);
+        
     }
 
     public int getCalcMethod() {
@@ -782,6 +853,14 @@ public class PrayTime {
     public void setLng(double lng) {
         this.lng = lng;
     }
+    
+    public double getElev() {
+    	return elev;
+    }
+    
+    public void setElev(double elv) {
+    	this.elev = elv;
+    }
 
     public double getTimeZone() {
         return timeZone;
@@ -818,7 +897,7 @@ public class PrayTime {
     private int getISNA() {
         return ISNA;
     }
-
+    
     private void setISNA(int iSNA) {
         ISNA = iSNA;
     }
@@ -854,6 +933,14 @@ public class PrayTime {
     private void setCustom(int custom) {
         Custom = custom;
     }
+    
+    private int getSMKA() {
+    	return SMKA;
+    }
+    
+    private void setSMKA(int SMKA) {
+    	this.SMKA = SMKA;
+    }
 
     private int getTehran() {
         return Tehran;
@@ -863,7 +950,8 @@ public class PrayTime {
         Tehran = tehran;
     }
 
-    private int getShafii() {
+    @SuppressWarnings("unused")
+		private int getShafii() {
         return Shafii;
     }
 
@@ -871,7 +959,8 @@ public class PrayTime {
         Shafii = shafii;
     }
 
-    private int getHanafi() {
+    @SuppressWarnings("unused")
+		private int getHanafi() {
         return Hanafi;
     }
 
@@ -887,7 +976,8 @@ public class PrayTime {
         None = none;
     }
 
-    private int getMidNight() {
+    @SuppressWarnings("unused")
+		private int getMidNight() {
         return MidNight;
     }
 
@@ -895,7 +985,8 @@ public class PrayTime {
         MidNight = midNight;
     }
 
-    private int getOneSeventh() {
+    @SuppressWarnings("unused")
+		private int getOneSeventh() {
         return OneSeventh;
     }
 
@@ -903,7 +994,8 @@ public class PrayTime {
         OneSeventh = oneSeventh;
     }
 
-    private int getAngleBased() {
+    @SuppressWarnings("unused")
+		private int getAngleBased() {
         return AngleBased;
     }
 
@@ -911,7 +1003,8 @@ public class PrayTime {
         AngleBased = angleBased;
     }
 
-    private int getTime24() {
+    @SuppressWarnings("unused")
+		private int getTime24() {
         return Time24;
     }
 
