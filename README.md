@@ -4,7 +4,14 @@ Welcome to Pray Times, an Islamic project aimed at providing an open-source libr
    
 Project Source : [http://praytimes.org](http://praytimes.org)
     
-Project Languges Support ( -Java Script -  Python - PHP - Java - C++ - C# - Objective C )
+Project Languges Support 
+- Javascript 
+-  Python 
+- PHP 
+- Java 
+- C++ 
+- C# 
+- Objective C
    
 you can choose other islamic services by visiting our web site : [https://mos7af.com](https://mos7af.com)
 
